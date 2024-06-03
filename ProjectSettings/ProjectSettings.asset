@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: bfd01667a30774c4fbf342669437f20d
+  productGUID: 492db5a81e56e2e499c5e0753d226a2a
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: TeamProject3d_C2Pal
+  productName: C2Pal
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -766,14 +766,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: TeamProject3d_C2Pal
+  metroPackageName: C2Pal
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: TeamProject3d_C2Pal
+  metroApplicationDescription: C2Pal
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -840,13 +840,13 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 2
+  activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 69d8091d-a835-44a4-a764-189e8bd46eb4
+  cloudProjectId: 6251fa0b-1c95-41e3-875f-255703397bfb
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: TeamProject3d_C2Pal
-  organizationId: joonham1214-gmail-com
+  projectName: C2Pal
+  organizationId: kspo1345
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
