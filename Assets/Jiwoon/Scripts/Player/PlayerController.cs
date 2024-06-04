@@ -7,7 +7,7 @@ using UnityEngine.Animations;
 public class PlayerController : MonoBehaviour
 {
     [Header("Animation")]
-    private Animator anim;
+    public Animator anim;
 
     [Header("Movement")]
     public float moveSpeed;
