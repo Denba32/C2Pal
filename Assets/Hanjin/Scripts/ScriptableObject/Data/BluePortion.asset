@@ -15,8 +15,9 @@ MonoBehaviour:
   id: 2
   displayName: BluePortion
   description: "Mana\uB97C \uC18C\uB7C9 \uD68C\uBCF5\uD569\uB2C8\uB2E4. "
+  itemType: 1
   icon: {fileID: 21300000, guid: b17807a1c340d1747a4b993eb24a61cd, type: 3}
-  dropPrefab: {fileID: 0}
+  dropPrefab: {fileID: 3504196860750944796, guid: 9abfff46dd01d5348b993bcfc4de59be, type: 3}
   canStack: 0
   maxAmount: 99
   consumables:

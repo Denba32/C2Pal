@@ -15,8 +15,9 @@ MonoBehaviour:
   id: 1
   displayName: RedPortion
   description: "HP\uB97C \uC18C\uB7C9 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
+  itemType: 1
   icon: {fileID: 21300000, guid: 7c596cef613b9ba488b7334293b06f10, type: 3}
-  dropPrefab: {fileID: 0}
+  dropPrefab: {fileID: 466424300560586271, guid: 1188b68b243f69140811fc5c848b8f6a, type: 3}
   canStack: 0
   maxAmount: 99
   consumables:

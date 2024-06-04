@@ -3,21 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ConsumableType
-{
-    Health,
-    Mana,
-    Stamina,
-    Hunger,
-}
-
-[Serializable]
-public class ItemDataConsumable
-{
-    public ConsumableType type;
-    public float value;
-}
-
 [CreateAssetMenu(fileName = "PortionItem", menuName = "ItemData/PortionItemData", order = 0)]
 public class PortionItemData : ConsumableItemData
 {

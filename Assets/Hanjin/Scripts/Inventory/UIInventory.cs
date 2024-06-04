@@ -4,9 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class UIInventory : MonoBehaviour
 {
+    [Header("Slot")]
     public ItemSlot[] slots;
 
     public GameObject inventoryWindow;
@@ -25,8 +27,8 @@ public class UIInventory : MonoBehaviour
     public GameObject unequipButton;
     public GameObject dropButton;
 
-    //// 플레이어의 정보를 미리 참조
-    //private PlayerController controller;
+    // 플레이어의 정보를 미리 참조
+    private PlayerController controller;
     //// 플레이어의 상태를 미리 참조
     //private PlayerCondition condition;
 
@@ -36,21 +38,10 @@ public class UIInventory : MonoBehaviour
 
     int curEquipIndex;
 
-    /*
     private void Start()
     {
         Init();
 
-        #region ========== 이벤트 장착 ==========
-
-        // 인벤토리 온오프
-        // 아이템을 줍기와 동시에 작동
-        // CharacterManager.Instance.Player.addItem += AddItem;
-
-        #endregion
-
-
-        // TODO : 정말 미리 오브젝트를 장착하는게 효율적인가?
         slots = new ItemSlot[slotPanel.childCount];
 
         for(int i = 0; i < slots.Length; i++)
@@ -64,16 +55,21 @@ public class UIInventory : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-    */
-
+    
     private void OnEnable()
     {
+        CharacterManager.Instance.Player.onAddItem += AddItem;
         // ClearSelectedItemWindow();
+    }
+    private void OnDisable()
+    {
+        CharacterManager.Instance.Player.onAddItem -= AddItem;
+
     }
 
     private void Init()
     {
-        //controller = CharacterManager.Instance.Player.controller;
+        controller = CharacterManager.Instance.Player.controller;
         //condition = CharacterManager.Instance.Player.condition;
         //dropPosition = CharacterManager.Instance.Player.dropPosition;
     }
@@ -111,13 +107,45 @@ public class UIInventory : MonoBehaviour
     {
         return inventoryWindow.activeInHierarchy;
     }
-    /*
+
+    
     // 인벤토리에 주운 아이템 넣기
     void AddItem()
     {
         // 플레이어가 상호작요한 아이템 데이터
         ItemData data = CharacterManager.Instance.Player.itemData;
 
+        if (data.itemType == ItemType.Consumable)
+        {
+            ConsumableItemData csData = data as ConsumableItemData;
+            if(csData != null)
+            {
+                ItemSlot slot = GetItemStack(csData);
+                if(slot != null)
+                {
+                    slot.quantity++;
+                    UpdateUI();
+                    CharacterManager.Instance.Player.itemData = null;
+                    return;
+                }
+
+            }
+        }
+
+        // 빈 슬롯을 찾아서 반환
+        ItemSlot emptySlot = GetEmptySlot();
+
+        if (emptySlot != null)
+        {
+            emptySlot.item = data;
+            emptySlot.quantity = 1;
+            UpdateUI();
+            CharacterManager.Instance.Player.itemData = null;
+            return;
+        }
+
+
+        /*
         if(data.canStack)
         {
             ItemSlot slot = GetItemStack(data);
@@ -137,17 +165,42 @@ public class UIInventory : MonoBehaviour
         {
             emptySlot.item = data;
             emptySlot.quantity = 1;
-            UpdateUI();
+            // UpdateUI();
             CharacterManager.Instance.Player.itemData = null;
             return;
         }
-
+        */
         // 아이템창이 꽉찬 경우
         // 아이템을 뱉어냄
         // TODO : 먹기 전에, 인벤의 용량이 충분한지 체크
-        ThrowItem(data);
+        // ThrowItem(data);
         CharacterManager.Instance.Player.itemData = null;
     }
+
+    ItemSlot GetItemStack(ConsumableItemData data)
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].item == data && slots[i].quantity < data.maxAmount)
+            {
+                return slots[i];
+            }
+        }
+        return null;
+    }
+
+    ItemSlot GetEmptySlot()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].item == null)
+            {
+                return slots[i];
+            }
+        }
+        return null;
+    }
+
     
     /// <summary>
     /// 
@@ -173,29 +226,9 @@ public class UIInventory : MonoBehaviour
         }
     }
 
-    ItemSlot GetItemStack(ItemData data)
-    {
-        for(int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item == data && slots[i].quantity < data.maxStackAmount)
-            {
-                return slots[i];
-            }
-        }
-        return null;
-    }
 
-    ItemSlot GetEmptySlot()
-    {
-        for(int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item == null)
-            {
-                return slots[i];
-            }
-        }
-        return null;
-    }
+
+    /*
 
     void ThrowItem(ItemData data)
     {
