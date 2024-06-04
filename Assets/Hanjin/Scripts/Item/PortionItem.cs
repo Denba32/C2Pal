@@ -25,7 +25,11 @@ public class PortionItem : ConsumableItem
     {
         base.OnInteract();
 
+        Debug.Log($"{data.displayName} 포션 줍기");
+        CharacterManager.Instance.Player.itemData = data;
+        CharacterManager.Instance.Player.onAddItem?.Invoke();
 
+        Destroy(gameObject);
     }
 
     public override InteractableType GetInteractableType() => InteractableType.Pickup;

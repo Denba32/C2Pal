@@ -15,8 +15,9 @@ MonoBehaviour:
   id: 3
   displayName: GreenPortion
   description: "Stamina\uB97C \uC18C\uB7C9 \uD68C\uBCF5\uD569\uB2C8\uB2E4. "
+  itemType: 1
   icon: {fileID: 21300000, guid: 07c4f19704646b449b161d370880de42, type: 3}
-  dropPrefab: {fileID: 0}
+  dropPrefab: {fileID: 8376116940244820312, guid: aec50659cf5590e43b132277fdf18a37, type: 3}
   canStack: 0
   maxAmount: 99
   consumables:

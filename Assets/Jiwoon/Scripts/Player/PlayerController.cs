@@ -63,19 +63,19 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed)
         {
             curMovementInput = context.ReadValue<Vector2>();
             anim.SetBool("IsMove", true);
         }
-        else if(context.phase == InputActionPhase.Canceled)
+        else if (context.phase == InputActionPhase.Canceled)
         {
             curMovementInput = Vector2.zero;
             anim.SetBool("IsMove", false);
         }
 
     }
-    
+
 
     void CameraLook()
     {
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
     public void Onjump(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started && IsGrounded())
+        if (context.phase == InputActionPhase.Started && IsGrounded())
         {
             _rb.AddForce(Vector2.up * jumppower, ForceMode.Impulse);
         }
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
             new Ray(transform.position + (-transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down)
         };
 
-        for(int i = 0; i < rays.Length; i++)
+        for (int i = 0; i < rays.Length; i++)
         {
             if (Physics.Raycast(rays[i], 0.5f, groundLayerMask))
             {
@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
- 
+
     }
 
     public void OnOpenInventory(InputAction.CallbackContext context)
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
         if (Time.timeScale == 0f)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1f;           
+            Time.timeScale = 1f;
         }
         else
         {

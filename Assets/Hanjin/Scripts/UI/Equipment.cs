@@ -9,12 +9,12 @@ public class Equipment : MonoBehaviour
     public Transform equipParent;
 
     private PlayerController controller;
-    private PlayerCondition condition;
+    // private PlayerCondition condition;
 
     private void Start()
     {
         controller = GetComponent<PlayerController>();
-        condition = GetComponent<PlayerCondition>();
+        // condition = GetComponent<PlayerCondition>();
     }
 
     //public void EquipNew(ItemData data)
@@ -34,9 +34,6 @@ public class Equipment : MonoBehaviour
 
     public void OnAttackInput(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Performed && curEquip != null && controller.canLook)
-        {
-            curEquip.OnAttackInput();
-        }
+
     }
 }
