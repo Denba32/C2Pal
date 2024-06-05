@@ -32,26 +32,19 @@ public abstract class ItemData : ScriptableObject
     public int id;
     public string displayName;
     public string description;
-    public ItemType itemType;
+    
+    public Define.ItemType itemType;
     public Sprite icon;
     public GameObject dropPrefab;
 
-    /*
-    [Header("Info")]
-    public string displayName;
-    public string description;
-    public ItemType type;
-    public Sprite icon;
-    public GameObject dropPrefab;
+    public int price;
 
-    [Header("Stacking")]
-    public bool canStack;
-    public int maxStackAmount;
+    private void OnValidate()
+    {
+#if UNITY_EDITOR
+        displayName = this.name;
+        UnityEditor.EditorUtility.SetDirty(this);
+#endif
+    }
 
-    [Header("Consumable")]
-    public ItemDataConsumable[] consumables;
-
-    [Header(("Equip"))]
-    public GameObject equipPrefab;
-    */
 }

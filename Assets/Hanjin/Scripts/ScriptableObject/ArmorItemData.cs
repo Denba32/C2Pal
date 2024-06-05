@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmorItemData : ItemObject
-{
 
+[CreateAssetMenu(fileName = "ArmorItemData", menuName = "ItemData/ArmorItemData", order = 2)]
+public class ArmorItemData : EquipmentItemData
+{
+    public float shieldValue;
 }

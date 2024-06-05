@@ -3,14 +3,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public RectTransform buttonRect;
+    public UIDescription description;
+
     public ItemData item;
 
     public Button button;
     public Image icon;
     public TMP_Text quantityText;
-    private Outline outline;
+    public Outline outline;
 
     public UIInventory inventory;
 
@@ -18,16 +21,16 @@ public class ItemSlot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     public bool equipped;
     public int quantity;
 
-    private Vector2 lastPos;
 
-
-    private void Awake()
-    {
-        outline = GetComponent<Outline>();
-    }
     private void OnEnable()
     {
         outline.enabled = equipped;
+        button.onClick.AddListener(OnClickButton);
+    }
+
+    private void OnDisable()
+    {
+        button.onClick.RemoveListener(OnClickButton);
     }
 
     public void Set()
@@ -48,6 +51,7 @@ public class ItemSlot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         icon.sprite = null;
         icon.gameObject.SetActive(false);
         quantityText.text = string.Empty;
+        outline.enabled = false;
     }
 
     public bool HasItem() => item != null;
@@ -55,24 +59,53 @@ public class ItemSlot : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
 
     public void OnClickButton()
     {
-        // inventory.SelectItem(index);
-        
+        ActiveDescription(false);
+
+        ActiveSelectedPanel();
+        inventory.SelectItem(index);
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    { 
 
-    }
-
-    public void OnDrag(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if (eventData != null)
-            icon.transform.position = eventData.position;
+        if(item != null && !inventory.selectedPanel.gameObject.activeInHierarchy)
+        {
+            ActiveDescription(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ActiveDescription(false);
     }
 
 
-    public void OnEndDrag(PointerEventData eventData)
+    private void ActiveSelectedPanel()
     {
+        Vector3 toRightBottom = new Vector3(buttonRect.rect.width / 2, -buttonRect.rect.height / 2, 0);
 
+        Vector3 worldPoint = buttonRect.TransformPoint(toRightBottom);
+
+        inventory.selectedContent.transform.position = worldPoint;
+
+    }
+    private void ActiveDescription(bool active)
+    {
+        if(active)
+        {
+            Vector3 toRightBottom = new Vector3(buttonRect.rect.width / 2, -buttonRect.rect.height / 2, 0);
+
+            Vector3 worldPoint = buttonRect.TransformPoint(toRightBottom);
+
+            description.transform.position = worldPoint;
+
+            description.gameObject.SetActive(true);
+
+            description.SetDescription(item.icon, item.displayName, item.description);
+        }
+        else
+        {
+            description.gameObject.SetActive(false);
+        }
     }
 }
