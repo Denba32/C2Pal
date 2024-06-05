@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Attack")]
+    public float damage;
+    public BoxCollider meleeArea;
+    public TrailRenderer trailEffect;
+    public float force;
+
     [Header("Animation")]
     public Animator anim;
 
     [Header("Movement")]
     public float moveSpeed;
+    private float moveSpeedRestorer;
     public float jumppower;
     private Vector2 curMovementInput;
 
@@ -32,6 +40,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
+        moveSpeedRestorer = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
     }
     private void FixedUpdate()
@@ -67,13 +76,13 @@ public class PlayerController : MonoBehaviour
         {
             curMovementInput = context.ReadValue<Vector2>();
             anim.SetBool("IsMove", true);
+            
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
             curMovementInput = Vector2.zero;
             anim.SetBool("IsMove", false);
         }
-
     }
 
 
@@ -126,11 +135,29 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             anim.SetBool("IsAttack", true);
+            StopCoroutine("Swing");
+            StartCoroutine("Swing");
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (context.phase == InputActionPhase.Performed)
         {
             anim.SetBool("IsAttack", false);
         }
+    }
+    IEnumerator Swing()
+    {
+        moveSpeed = 0f;
+        yield return new WaitForSeconds(0.1f);
+        meleeArea.enabled = true;
+        trailEffect.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        _rb.AddForce(transform.forward * 10f * Time.timeScale, ForceMode.VelocityChange );
+        meleeArea.enabled = false;
+
+        yield return new WaitForSeconds(0.3f);
+        trailEffect.enabled = false;
+
+        yield return new WaitForSeconds(0.1f);
+        moveSpeed = moveSpeedRestorer;
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
