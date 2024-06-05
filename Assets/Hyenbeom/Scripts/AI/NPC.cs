@@ -9,23 +9,24 @@ public enum AIState
     Wandering,
     Flee,
     Attack,
+    GoingHome = 9,
     Dead = 10
 } // 공격이나 다른 건 추후에 추가할 것
 
 public class NPC : MonoBehaviour
 {
     // 필요한 컴포넌트
-    private Animator animator;
-    NavMeshAgent agent;
-    Collider _collider;
+    protected Animator animator;
+    protected NavMeshAgent agent;
+    protected Collider _collider;
 
     // private SkinnedMeshRenderer[] meshRenderers;
 
     // 플레이어 거리 구하기
-    private float playerDistance;
+    protected float playerDistance;
 
     // 상태
-    AIState aiState;
+    protected AIState aiState;
 
     // SO
     public AnimalSO statSO;
@@ -42,7 +43,7 @@ public class NPC : MonoBehaviour
         ChangeState(AIState.Wandering);
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (aiState == AIState.Dead) { return; }
         // 플레이어 감지
@@ -65,7 +66,7 @@ public class NPC : MonoBehaviour
     }
 
     // 상태 변환
-    void ChangeState(AIState state)
+    protected virtual void ChangeState(AIState state)
     {
         aiState = state;
 
@@ -95,7 +96,7 @@ public class NPC : MonoBehaviour
         }
     }
 
-    void WanderingState()
+    protected void WanderingState()
     {
         if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
         {
@@ -118,7 +119,7 @@ public class NPC : MonoBehaviour
         agent.SetDestination(hit.position);
     }
 
-    void FleeState()
+    protected void FleeState()
     {
         float destinationDistance = (agent.destination - CharacterManager.Instance.Player.transform.position).sqrMagnitude;
         if (agent.remainingDistance < 1f || destinationDistance < statSO.safeDistance * statSO.safeDistance || playerDistance < 1f)
@@ -170,16 +171,7 @@ public class NPC : MonoBehaviour
         return Vector3.Angle(transform.position - CharacterManager.Instance.Player.transform.position, transform.position + targetPos);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Player"))
-        {
-            if (aiState == AIState.Dead) { return; }
-            ChangeState(AIState.Dead);
-        }
-    }
-
-    private void Destroy()
+    protected virtual void Destroy()
     {
         Destroy(this.gameObject);
     }
