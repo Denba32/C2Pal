@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class RightHand : MonoBehaviour
 {
     private float Health = 10;
     private void OnTriggerEnter(Collider other)
