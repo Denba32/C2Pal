@@ -171,9 +171,9 @@ GameObject:
   - component: {fileID: 4755997093595441831}
   - component: {fileID: 3582272223334822543}
   - component: {fileID: 5172526312313423306}
-  - component: {fileID: 1959204212832071354}
   - component: {fileID: 8037941014781995818}
   - component: {fileID: 4365246440106790736}
+  - component: {fileID: -7291244713294872395}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -245,19 +245,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.11, y: 0.165, z: 0.26}
   m_Center: {x: 0, y: 0.082, z: 0.035}
---- !u!114 &1959204212832071354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1248776477298230294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cde62fcfd849eb48a41d428cf69ed97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  statSO: {fileID: 11400000, guid: 6cd6b809424a46f4daeff615d4d60c9e, type: 2}
 --- !u!195 &8037941014781995818
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -301,6 +288,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-7291244713294872395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248776477298230294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1762fa3bb22fd2b4aa9519378779165a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statSO: {fileID: 11400000, guid: 6cd6b809424a46f4daeff615d4d60c9e, type: 2}
 --- !u!1 &1775999412985498928
 GameObject:
   m_ObjectHideFlags: 0

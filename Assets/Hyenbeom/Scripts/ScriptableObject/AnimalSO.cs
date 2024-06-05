@@ -18,13 +18,13 @@ public class AnimalSO : ScriptableObject
     [Header("Loot")]
     public GameObject[] dropOnDeath;
 
-    // 배회 - 원더링 최소 시간, 최대 시간 // 애초부터 랜덤인데 최소 거리, 최대 거리가 필요할까 싶네..
+    // 배회 - 감지 거리, 원더링 최소 시간, 최대 시간 
     [Header("Wander Settings")]
+    public float detectDistance;
     public float minWanderWaitTime;
     public float maxWanderWaitTime;
 
-    // 도주 - 플레이어 감지 거리, 안전 거리
+    // 도주 - 안전 거리
     [Header("Flee Settings")]
-    public float detectDistance;
     public float safeDistance;
 }

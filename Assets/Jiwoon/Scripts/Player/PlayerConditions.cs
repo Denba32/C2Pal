@@ -29,6 +29,27 @@ public class PlayerCondition : MonoBehaviour
             Die();
         }
     }
+    public bool Heal(float amount)
+    {
+        if(health.curValue + amount > health.maxValue)
+        {
+            Debug.Log("HP가 이미 Max 상태입니다.");
+            return false;
+        }
+
+        health.Add(amount);
+        return true;
+    }
+
+    public void Eat(float amount)
+    {
+        hunger.Add(amount);
+    }
+
+    public void RestoreStamina(float amount)
+    {
+        stamina.Add(amount);
+    }
 
     private void Die()
     {
