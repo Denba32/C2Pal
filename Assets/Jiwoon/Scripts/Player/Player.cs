@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
 {
     public PlayerController controller;
 
+    public Equipment weapon;
+    public Equipment armor;
+
     public Action onAddItem;
     public ItemData itemData;
 

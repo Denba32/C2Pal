@@ -140,7 +140,16 @@ public class PlayerController : MonoBehaviour
 
     public void OnOpenInventory(InputAction.CallbackContext context)
     {
-
+        if (Time.timeScale == 0f)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Time.timeScale = 0f;
+        }
     }
 
     public void OnOpenOptions(InputAction.CallbackContext context)
