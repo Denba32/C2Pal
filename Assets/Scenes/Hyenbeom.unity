@@ -844,7 +844,7 @@ GameObject:
   - component: {fileID: 450828986}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -944,6 +944,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2823c1d2a2f285d4db038058522a6e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
+  meleeArea: {fileID: 0}
+  trailEffect: {fileID: 0}
+  force: 0
   anim: {fileID: 0}
   moveSpeed: 10
   jumppower: 50
@@ -1346,6 +1350,10 @@ PrefabInstance:
     - target: {fileID: 1248776477298230294, guid: 70ed69c496903644db75361bfc8eeb71, type: 3}
       propertyPath: m_Name
       value: Rabbit
+      objectReference: {fileID: 0}
+    - target: {fileID: 1248776477298230294, guid: 70ed69c496903644db75361bfc8eeb71, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4755997093595441831, guid: 70ed69c496903644db75361bfc8eeb71, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1798,6 +1806,63 @@ Transform:
   - {fileID: 429122527}
   m_Father: {fileID: 811511804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &915521461
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1205489494030093688, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7226319116902076475, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
+      propertyPath: m_Name
+      value: WolfBoss
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
 --- !u!1 &960622090
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,7 +2214,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 50, y: 1, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2165,6 +2230,10 @@ PrefabInstance:
     - target: {fileID: 5706939102546714944, guid: 76d389d54ae8b70499df98bc442a8ec6, type: 3}
       propertyPath: m_Name
       value: RabbitHole
+      objectReference: {fileID: 0}
+    - target: {fileID: 5706939102546714944, guid: 76d389d54ae8b70499df98bc442a8ec6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7640946755175821068, guid: 76d389d54ae8b70499df98bc442a8ec6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2520,6 +2589,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mushroom
       objectReference: {fileID: 0}
+    - target: {fileID: 3623362365587192924, guid: f9035488c3777b34e8ca161131cd14a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2599,6 +2672,10 @@ PrefabInstance:
     - target: {fileID: 834924963451266460, guid: 5a3821e5af61096488f97cff65a01304, type: 3}
       propertyPath: m_Name
       value: AngryLog
+      objectReference: {fileID: 0}
+    - target: {fileID: 834924963451266460, guid: 5a3821e5af61096488f97cff65a01304, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5396214400838475202, guid: 5a3821e5af61096488f97cff65a01304, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2733,7 +2810,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449793746}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1449793748
 Camera:
   m_ObjectHideFlags: 0
@@ -3420,3 +3497,4 @@ SceneRoots:
   - {fileID: 1225797490}
   - {fileID: 647156067}
   - {fileID: 1087594865}
+  - {fileID: 915521461}
