@@ -42,7 +42,13 @@ public class ResourceItem : ItemObject
         {
             if (collision.gameObject.CompareTag("Level"))
             {
-                aSource.PlayOneShot(data.dropSound, 0.5f);
+                if(aSource != null)
+                {
+                    if (aSource.isPlaying)
+                        aSource.Stop();
+                    aSource.PlayOneShot(data.dropSound, 0.5f);
+
+                }
             }
         }
     }
