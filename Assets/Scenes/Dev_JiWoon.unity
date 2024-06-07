@@ -996,6 +996,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   condition: {fileID: 0}
+  weapon: {fileID: 0}
+  armor: {fileID: 0}
+  itemData: {fileID: 0}
 --- !u!114 &645114758
 MonoBehaviour:
   m_ObjectHideFlags: 0
