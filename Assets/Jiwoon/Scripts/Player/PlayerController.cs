@@ -7,6 +7,7 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
+    public UIConditions ui;
 
     [Header("Attack")]
     [SerializeField] private float damage;
