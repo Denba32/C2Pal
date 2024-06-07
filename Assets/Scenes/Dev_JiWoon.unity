@@ -221,12 +221,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173677420}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.8, y: 6.348654, z: 7.28}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -958.2, y: -533.65137, z: 7.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 496126066}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &300061222
 GameObject:
@@ -792,6 +792,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1582857771}
+  - {fileID: 173677424}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -975,6 +976,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   moveSpeed: 10
   jumppower: 50
+  runSpeedMultiplierl: 2
   cameraContainer: {fileID: 1662565027}
   minXlook: 0
   maxXlook: 0
@@ -996,8 +998,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   condition: {fileID: 0}
-  weapon: {fileID: 0}
-  armor: {fileID: 0}
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
   itemData: {fileID: 0}
 --- !u!114 &645114758
 MonoBehaviour:
@@ -1216,6 +1218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiconditions: {fileID: 0}
+  condition: {fileID: 0}
   noHungerHealthDecay: 2
 --- !u!1 &656442397
 GameObject:
@@ -4554,6 +4557,5 @@ SceneRoots:
   - {fileID: 1408170703}
   - {fileID: 300061226}
   - {fileID: 645114759}
-  - {fileID: 173677424}
   - {fileID: 496126066}
   - {fileID: 448554046}

@@ -7,7 +7,8 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
-    public UIConditions ui;
+    PlayerInput Inputs;
+    bool isRunning = false;
 
     [Header("Attack")]
     [SerializeField] private float damage;
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumppower;
+    [SerializeField] private float runSpeedMultiplierl = 2f;
     private float moveSpeedRestorer;
     private Vector2 curMovementInput;
 
