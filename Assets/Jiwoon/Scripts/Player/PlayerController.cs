@@ -7,29 +7,30 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
+
     [Header("Attack")]
-    public float damage;
-    public BoxCollider meleeArea;
-    public TrailRenderer trailEffect;
-    public float force;
+    [SerializeField] private float damage;
+    [SerializeField] private BoxCollider meleeArea;
+    [SerializeField] private TrailRenderer trailEffect;
+    [SerializeField] private float force;
 
     [Header("Animation")]
-    public Animator anim;
+    [SerializeField] private Animator anim;
 
     [Header("Movement")]
-    public float moveSpeed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumppower;
     private float moveSpeedRestorer;
-    public float jumppower;
     private Vector2 curMovementInput;
 
     [Header("Look")]
-    public Transform cameraContainer;
-    public float minXlook;
-    public float maxXlook;
+    [SerializeField] private Transform cameraContainer;
+    [SerializeField] private float minXlook;
+    [SerializeField] private float maxXlook;
+    [SerializeField] private float lookSensitivity;
+    [SerializeField] private LayerMask groundLayerMask;
     private float camCurXRot;
-    public float lookSensitivity;
     private Vector2 mouseDelta;
-    public LayerMask groundLayerMask;
 
     private Rigidbody _rb;
 
@@ -75,13 +76,29 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Performed)
         {
             curMovementInput = context.ReadValue<Vector2>();
-            anim.SetBool("IsMove", true);
-            
+
+            if (curMovementInput != Vector2.zero)
+            {
+                if (Keyboard.current.leftShiftKey.isPressed)
+                {
+                    moveSpeed += 10;
+                    anim.SetBool("IsMove", false);
+                    anim.SetBool("IsRun", true);
+                }
+                else
+                {
+                    anim.SetBool("IsMove", true);
+                    anim.SetBool("IsRun", false);
+                }
+            }
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (context.phase == InputActionPhase.Canceled )
         {
             curMovementInput = Vector2.zero;
             anim.SetBool("IsMove", false);
+            anim.SetBool("IsRun", false); // 뛰기 상태를 해제
+            moveSpeed = moveSpeedRestorer;
+
         }
     }
 
