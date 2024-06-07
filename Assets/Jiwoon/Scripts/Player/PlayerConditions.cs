@@ -11,8 +11,6 @@ public class PlayerCondition : MonoBehaviour
     Condition hunger { get { return uiconditions.hunger; } }
     Condition stamina { get { return uiconditions.stamina; } }
 
-
-
     public float noHungerHealthDecay;
     void Update()
     {

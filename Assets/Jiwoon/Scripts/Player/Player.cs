@@ -8,8 +8,8 @@ public class Player : MonoBehaviour
     public PlayerController controller;
     public PlayerCondition condition;
 
-    public Equipment weapon;
-    public Equipment armor;
+    public Equipment primaryWeapon;
+    public Equipment secondaryWeapon;
 
     public Action onAddItem;
     public ItemData itemData;

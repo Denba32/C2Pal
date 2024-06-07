@@ -147,14 +147,14 @@ public class PlayerController : MonoBehaviour
     {
         moveSpeed = 0f;
         yield return new WaitForSeconds(0.1f);
-        meleeArea.enabled = true;
-        trailEffect.enabled = true;
+        // meleeArea.enabled = true;
+        // trailEffect.enabled = true;
         yield return new WaitForSeconds(0.3f);
         _rb.AddForce(transform.forward * 10f * Time.timeScale, ForceMode.VelocityChange );
-        meleeArea.enabled = false;
+        // meleeArea.enabled = false;
 
         yield return new WaitForSeconds(0.3f);
-        trailEffect.enabled = false;
+        // trailEffect.enabled = false;
 
         yield return new WaitForSeconds(0.1f);
         moveSpeed = moveSpeedRestorer;

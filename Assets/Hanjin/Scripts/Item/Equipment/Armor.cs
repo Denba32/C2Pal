@@ -9,11 +9,11 @@ public class Armor : EquipItem
         get => (ArmorItemData)base.data;
         set => base.data = value;
     }
-    public override void Equip()
-    {
-        base.Equip();
-    }
 
+    public override void Equip(Transform parent)
+    {
+        base.Equip(parent);
+    }
     public override void UnEquip()
     {
         base.UnEquip();

@@ -14,7 +14,7 @@ public class Interaction : MonoBehaviour
     public float maxCheckDistance;
     public LayerMask layerMask;
 
-    private Collider[] detectedObject;
+    public Collider[] detectedObject;
 
     public GameObject curInteractGameObject;
     private IInteractable curInteractable;
@@ -35,7 +35,6 @@ public class Interaction : MonoBehaviour
 
             DetectObject();
         }
-    
     }
 
     private void DetectObject()
@@ -50,7 +49,6 @@ public class Interaction : MonoBehaviour
                 curInteractable = interactable;
                 SetPromptText(true);
             }
-
         }
         else
         {

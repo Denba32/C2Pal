@@ -10,6 +10,9 @@ public class ResourceItem : ItemObject
         set => base.data = value;
     }
 
+    public AudioSource aSource;
+
+
     public override string GetInteractPrompt()
     {
         if (data == null)
@@ -33,5 +36,15 @@ public class ResourceItem : ItemObject
         Destroy(gameObject);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision != null)
+        {
+            if (collision.gameObject.CompareTag("Level"))
+            {
+                aSource.PlayOneShot(data.dropSound, 0.5f);
+            }
+        }
+    }
     public override InteractableType GetInteractableType() => InteractableType.Pickup;
 }

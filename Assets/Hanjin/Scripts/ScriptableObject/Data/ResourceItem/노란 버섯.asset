@@ -22,3 +22,4 @@ MonoBehaviour:
   price: 2
   canStack: 1
   maxAmount: 99
+  dropSound: {fileID: 0}

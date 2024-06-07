@@ -3,28 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-public enum ItemType
-{
-    Equipable,
-    Consumable,
-    Resource,
-    Buff,
-}
-
-public enum ConsumableType
-{
-    Health,
-    Hunger
-}
-
-[Serializable]
-public class ItemDataConsumable
-{
-    public ConsumableType type;
-    public float value;
-}
-*/
 
 public abstract class ItemData : ScriptableObject
 {

@@ -1,9 +1,17 @@
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class UIInventory : MonoBehaviour
 {
+    public int Gold { get; set; }
+
+    [Header("ItemInfo")]
+    private Dictionary<Define.ItemType, ItemSlot[]> inventoryDict = new Dictionary<Define.ItemType, ItemSlot[]>();
 
     [Header("Slot")]
     public ItemSlot[] slots;
@@ -13,7 +21,7 @@ public class UIInventory : MonoBehaviour
 
     // 플레이어가 아이템을 떨굴 때 위치
     public Transform dropPosition;
-
+        
     public GameObject descriptionPanel;
 
     [Header("Select Item")]
@@ -36,7 +44,8 @@ public class UIInventory : MonoBehaviour
     ItemData selectedItem;
     int selectedItemIndex = 0;
 
-    int curWeaponIndex;
+    int curPrimaryWeaponIndex;
+    int curSecondaryWeaponIndex;
     int curArmorIndex;
 
     private void Start()
@@ -73,6 +82,8 @@ public class UIInventory : MonoBehaviour
             slots[i].index = i;
             slots[i].inventory = this;
         }
+
+        inventoryDict.Add(Define.ItemType.None, slots);
 
         UpdateUI();
 
@@ -181,7 +192,6 @@ public class UIInventory : MonoBehaviour
                     CharacterManager.Instance.Player.itemData = null;
                     return;
                 }
-
             }
         }
         else if (data.itemType == Define.ItemType.Resource)
@@ -197,9 +207,7 @@ public class UIInventory : MonoBehaviour
                     CharacterManager.Instance.Player.itemData = null;
                     return;
                 }
-
             }
-
         }
 
         // 빈 슬롯을 찾아서 반환
@@ -217,6 +225,7 @@ public class UIInventory : MonoBehaviour
         ThrowItem(data);
 
         CharacterManager.Instance.Player.itemData = null;
+        inventoryDict.TryAdd(Define.ItemType.None, slots);
     }
 
     public void SelectItem(int index)
@@ -236,9 +245,44 @@ public class UIInventory : MonoBehaviour
         dropButton.SetActive(true);
     }
 
+    #region 정렬 기능
+    private void Sort(Define.ItemType type)
+    {
+        foreach (ItemSlot slot in slots)
+        {
+            if(type == Define.ItemType.None)
+            {
+                slot.gameObject.SetActive(true);
+                continue;
+            }
+            if(slot.item != null)
+            {
+                if (slot.item.itemType != type)
+                {
+                    slot.gameObject.SetActive(false);
+                }
+                else
+                {
+                    slot.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                slot.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void SortAll() => Sort(Define.ItemType.None);
+    public void SortWeapon() => Sort(Define.ItemType.Weapon);
+    public void SortResource() => Sort(Define.ItemType.Resource);
+    public void SortConsumable() => Sort(Define.ItemType.Consumable);
+
+    #endregion
+
     #region 아이템 사용 함수
 
-    
+
     // 아이템 사용
     public void OnUseButton()
     {
@@ -293,19 +337,31 @@ public class UIInventory : MonoBehaviour
         }
 
         // 타입별로 무기 장착
-        if (equipItem.equipmentType == Define.EquipmentType.Weapon)
+        if (equipItem.equipmentType == Define.EquipmentType.PrimaryWeapon || equipItem.equipmentType == Define.EquipmentType.ResourceTool)
         {
             // 장착중인 아이템이 있을 경우 
-            if (slots[curWeaponIndex].equipped)
+            if (slots[curPrimaryWeaponIndex].equipped)
             {
                 // 해당 아이템을 해제
-                UnEquip(curWeaponIndex);
+                UnEquip(curPrimaryWeaponIndex);
             }
 
-            CharacterManager.Instance.Player.weapon.Equip(equipItem);
+            CharacterManager.Instance.Player.primaryWeapon.Equip(equipItem);
 
-            curWeaponIndex = selectedItemIndex;
+            curPrimaryWeaponIndex = selectedItemIndex;
+        }
+        else if (equipItem.equipmentType == Define.EquipmentType.SecondaryWeapon)
+        {
+            // 장착중인 아이템이 있을 경우 
+            if (slots[curSecondaryWeaponIndex].equipped)
+            {
+                // 해당 아이템을 해제
+                UnEquip(curSecondaryWeaponIndex);
+            }
 
+            CharacterManager.Instance.Player.secondaryWeapon.Equip(equipItem);
+
+            curSecondaryWeaponIndex = selectedItemIndex;
         }
         else if(equipItem.equipmentType == Define.EquipmentType.Armor)
         {
@@ -315,7 +371,6 @@ public class UIInventory : MonoBehaviour
                 // 해당 아이템을 해제
                 UnEquip(curArmorIndex);
             }
-            CharacterManager.Instance.Player.armor.Equip(equipItem);
             curArmorIndex = selectedItemIndex;
         }
 
@@ -335,13 +390,13 @@ public class UIInventory : MonoBehaviour
         if(tmp == null)
             return;
 
-        if(tmp.equipmentType == Define.EquipmentType.Weapon)
+        if (tmp.equipmentType == Define.EquipmentType.PrimaryWeapon || tmp.equipmentType == Define.EquipmentType.ResourceTool)
         {
-            CharacterManager.Instance.Player.weapon.UnEquip();
+            CharacterManager.Instance.Player.primaryWeapon.UnEquip();
         }
-        else if(tmp.equipmentType == Define.EquipmentType.Armor)
+        else if(tmp.equipmentType == Define.EquipmentType.SecondaryWeapon)
         {
-            CharacterManager.Instance.Player.armor.UnEquip();
+            CharacterManager.Instance.Player.secondaryWeapon.UnEquip();
         }
         UpdateUI();
         selectedPanel.SetActive(false);
@@ -365,13 +420,13 @@ public class UIInventory : MonoBehaviour
         EquipmentItemData tmp = data as EquipmentItemData;
         if(tmp != null)
         {
-            if(tmp.equipmentType == Define.EquipmentType.Weapon)
+            if(tmp.equipmentType == Define.EquipmentType.PrimaryWeapon)
             {
-                UnEquip(curWeaponIndex);
+                UnEquip(curPrimaryWeaponIndex);
             }
             else if(tmp.equipmentType == Define.EquipmentType.Armor)
             {
-                UnEquip(curWeaponIndex);
+                UnEquip(curPrimaryWeaponIndex);
 
             }
         }

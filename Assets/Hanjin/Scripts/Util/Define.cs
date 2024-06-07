@@ -1,12 +1,18 @@
 
 using System;
 
+public interface IDamagable
+{
+    void Damage(float damage);
+}
 public class Define
 {
     public enum EquipmentType
     {
-        Weapon,
+        PrimaryWeapon,
+        SecondaryWeapon,
         Armor,
+        ResourceTool
     }
 
     [Flags]
@@ -37,5 +43,21 @@ public class Define
         Health,
         Stamina,
         Hunger,
+    }
+
+    public enum ResourceType
+    {
+        None,
+        Wood,
+        Rock,
+    }
+
+    public enum RewardType
+    {
+        None,
+        Gold,
+        Weapon,
+        Armor,
+        Resource
     }
 }

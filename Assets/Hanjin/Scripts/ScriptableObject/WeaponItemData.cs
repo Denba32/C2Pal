@@ -11,6 +11,8 @@ public class WeaponItemData : EquipmentItemData
     public float useStamina;
 
     [Header("Combat")]
-    public float damage;
+    public float value;
 
+    [Header("Resource Tool")]
+    public Define.ResourceType resourceType;
 }

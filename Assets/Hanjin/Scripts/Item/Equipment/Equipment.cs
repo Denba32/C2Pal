@@ -1,10 +1,12 @@
 
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Equipment : MonoBehaviour
 {
     public EquipItem curEquip;
-    public Transform equipParent;
+
+    public Transform equipPos;
 
     private PlayerController controller;
     // private PlayerCondition condition;
@@ -18,13 +20,17 @@ public class Equipment : MonoBehaviour
     public void Equip(EquipmentItemData data)
     {
         UnEquip();
-        curEquip = Instantiate(data.equipPrefab, equipParent).GetComponent<EquipItem>();
+        curEquip = Instantiate(data.equipPrefab, transform).GetComponent<EquipItem>();
+
+        curEquip.name = data.equipPrefab.name;
+        curEquip.Equip(equipPos);
     }
 
     public void UnEquip()
     {
         if(curEquip != null)
         {
+            curEquip.UnEquip();
             Destroy(curEquip.gameObject);
             curEquip = null;
         }
