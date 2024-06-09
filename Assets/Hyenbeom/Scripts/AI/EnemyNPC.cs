@@ -62,6 +62,7 @@ public class EnemyNPC : MonoBehaviour
         {
             case AIState.Idle:
             case AIState.Wandering:
+            case AIState.Hit:
                 WanderingState();
                 break;
             case AIState.Attack:
@@ -111,7 +112,7 @@ public class EnemyNPC : MonoBehaviour
             ChangeState(AIState.Idle);
             Invoke("NewWanderingPoint", Random.Range(statSO.minWanderWaitTime, statSO.maxWanderWaitTime));
         }
-        if (playerDistance < statSO.detectDistance * statSO.detectDistance && IsPlayerInFieldOfView())
+        if (playerDistance < statSO.detectDistance * statSO.detectDistance && IsPlayerInFieldOfView() || aiState == AIState.Hit)
         {
             ChangeState(AIState.Attack);
             agent.ResetPath();
