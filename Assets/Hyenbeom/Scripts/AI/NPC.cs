@@ -203,6 +203,7 @@ public class NPC : MonoBehaviour
         yield return new WaitForSeconds(15f);
         foreach (GameObject item in dropItems)
         {
+            if (item == null) { continue; } // 이미 주운 거 오류 방지용
             Destroy(item);
         }
         Destroy(this.gameObject);

@@ -204,6 +204,7 @@ public class EnemyNPC : MonoBehaviour
         }
         foreach (GameObject item in dropItems)
         {
+            if (item == null) { continue; } // 이미 주운 거 오류 방지용
             Destroy(item);
         }
         Destroy(this.gameObject);
