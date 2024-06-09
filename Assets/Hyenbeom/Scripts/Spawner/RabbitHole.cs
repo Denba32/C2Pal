@@ -11,6 +11,9 @@ public class RabbitHole : MonoBehaviour
     public float spawnDuration;
     public int maxSpawn;
 
+    public float callTest;
+    public float comeOutTest;
+
     private List<GameObject> rabbitList = new List<GameObject>();
 
     IEnumerator coroutineSpawn;
@@ -35,12 +38,12 @@ public class RabbitHole : MonoBehaviour
 
     IEnumerator RabbitCallTest()
     {
-        yield return new WaitForSeconds(95f);
+        yield return new WaitForSeconds(callTest);
         RabbitCall();
     }
     IEnumerator RabbitComeOutTest()
     {
-        yield return new WaitForSeconds(110f);
+        yield return new WaitForSeconds(comeOutTest);
         RabbitComeOut();
     }
 

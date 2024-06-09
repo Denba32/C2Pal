@@ -2629,10 +2629,13 @@ MonoBehaviour:
   scracthCollider: {fileID: 2603853600534886728}
   DashDamagedActive: 0
   DontSetPlayerDestination: 0
-  rangedattackCooltime: 0
-  blackOrb: {fileID: 1676389850741517546, guid: cdafae1ef140d4c4c9021a3c906be603, type: 3}
   rangedattackTransform: {fileID: 8580716522357874169}
-  statSO: {fileID: 11400000, guid: fb4d733a03008314b90cd9dcfe191801, type: 2}
+  usePosition: {x: 0, y: 0.5, z: -8}
+  spawnShadowPosition: {x: 0, y: 0.5, z: -20}
+  maxSideDistance: 23
+  isTrueXFalseZ: 1
+  activateSpawnShadow: 0
+  statSO: {fileID: 11400000, guid: 385a5456c82647349a43a8a2374a2dc9, type: 2}
 --- !u!65 &454951007340906744
 BoxCollider:
   m_ObjectHideFlags: 0

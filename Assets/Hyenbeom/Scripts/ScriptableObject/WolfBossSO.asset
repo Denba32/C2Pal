@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eafeae7555d804ca215b85a5e03d65, type: 3}
+  m_Name: WolfBossSO
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  health: 100
+  walkSpeed: 2
+  runSpeed: 10
+  dropOnDeath: []
+  detectDistance: 10
+  damage: 5
+  attackRate: 5
+  attackDistance: 6
+  fieldOfView: 60
+  dashCoolTime: 20
+  rangedattackCooltime: 15
+  blackOrb: {fileID: 1676389850741517546, guid: cdafae1ef140d4c4c9021a3c906be603, type: 3}
+  _ShadowPrefab: {fileID: 3672913902056399866, guid: e1f829c06af361346af5df18cc91a4d9, type: 3}
+  _maxSize: 10
+  spawnDuration: 0.25
+  spawnAmount: 60
+  shadowSpeed: 25
+  Phase2Magnification: 1.2
