@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody _rb;
 
+    private bool isPause = false;
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -43,10 +45,18 @@ public class PlayerController : MonoBehaviour
     {
         moveSpeedRestorer = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
+
+        GameManager.Instance.onGamePause += PausePlayer;
+        GameManager.Instance.onGameStart += PlayPlayer;
+
+
     }
     private void FixedUpdate()
     {
-        Move();
+        if (!isPause)
+        {
+            Move();
+        }
     }
 
     private void Update()
@@ -56,10 +66,11 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Time.timeScale > 0f)
+        if (!isPause)
         {
             CameraLook();
         }
+
     }
 
     private void Move()
@@ -73,33 +84,37 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
+        if(!isPause)
         {
-            curMovementInput = context.ReadValue<Vector2>();
-
-            if (curMovementInput != Vector2.zero)
+            if (context.phase == InputActionPhase.Performed)
             {
-                if (Keyboard.current.leftShiftKey.isPressed)
+                curMovementInput = context.ReadValue<Vector2>();
+
+                if (curMovementInput != Vector2.zero)
                 {
-                    moveSpeed += 10;
-                    anim.SetBool("IsMove", false);
-                    anim.SetBool("IsRun", true);
-                }
-                else
-                {
-                    anim.SetBool("IsMove", true);
-                    anim.SetBool("IsRun", false);
+                    if (Keyboard.current.leftShiftKey.isPressed)
+                    {
+                        moveSpeed += 10;
+                        anim.SetBool("IsMove", false);
+                        anim.SetBool("IsRun", true);
+                    }
+                    else
+                    {
+                        anim.SetBool("IsMove", true);
+                        anim.SetBool("IsRun", false);
+                    }
                 }
             }
-        }
-        else if (context.phase == InputActionPhase.Canceled )
-        {
-            curMovementInput = Vector2.zero;
-            anim.SetBool("IsMove", false);
-            anim.SetBool("IsRun", false); // 뛰기 상태를 해제
-            moveSpeed = moveSpeedRestorer;
+            else if (context.phase == InputActionPhase.Canceled)
+            {
+                curMovementInput = Vector2.zero;
+                anim.SetBool("IsMove", false);
+                anim.SetBool("IsRun", false); // 뛰기 상태를 해제
+                moveSpeed = moveSpeedRestorer;
 
+            }
         }
+
     }
 
 
@@ -127,6 +142,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            UIManager.Instance.ShowInventory();
+        }
+    }
+
     bool IsGrounded()
     {
         Ray[] rays = new Ray[4]
@@ -149,16 +172,20 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (!isPause)
         {
-            anim.SetBool("IsAttack", true);
-            StopCoroutine("Swing");
-            StartCoroutine("Swing");
+            if (context.phase == InputActionPhase.Started)
+            {
+                anim.SetBool("IsAttack", true);
+                StopCoroutine("Swing");
+                StartCoroutine("Swing");
+            }
+            else if (context.phase == InputActionPhase.Performed)
+            {
+                anim.SetBool("IsAttack", false);
+            }
         }
-        else if (context.phase == InputActionPhase.Performed)
-        {
-            anim.SetBool("IsAttack", false);
-        }
+
     }
     IEnumerator Swing()
     {
@@ -167,7 +194,7 @@ public class PlayerController : MonoBehaviour
         // meleeArea.enabled = true;
         // trailEffect.enabled = true;
         yield return new WaitForSeconds(0.3f);
-        _rb.AddForce(transform.forward * 10f * Time.timeScale, ForceMode.VelocityChange );
+        _rb.AddForce(transform.forward * 10f * Time.timeScale, ForceMode.VelocityChange);
         // meleeArea.enabled = false;
 
         yield return new WaitForSeconds(0.3f);
@@ -175,25 +202,6 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
         moveSpeed = moveSpeedRestorer;
-    }
-
-    public void OnPickUp(InputAction.CallbackContext context)
-    {
-
-    }
-
-    public void OnOpenInventory(InputAction.CallbackContext context)
-    {
-        if (Time.timeScale == 0f)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1f;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-            Time.timeScale = 0f;
-        }
     }
 
     public void OnOpenOptions(InputAction.CallbackContext context)
@@ -217,6 +225,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void PausePlayer()
+    {
+        isPause = true;
+        anim.SetBool("IsMove", false);
+        anim.SetBool("IsRun", false);
+        _rb.velocity = Vector3.zero;
+    }
 
+    private void PlayPlayer() => isPause = false;
 
 }

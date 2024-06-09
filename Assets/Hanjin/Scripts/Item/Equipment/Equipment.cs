@@ -15,6 +15,8 @@ public class Equipment : MonoBehaviour
     {
         controller = GetComponent<PlayerController>();
         // condition = GetComponent<PlayerCondition>();
+
+        GameManager.Instance.Data.Init();
     }
 
     public void Equip(EquipmentItemData data)

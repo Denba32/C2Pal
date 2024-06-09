@@ -178,6 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 7120894798063985162}
   aSource: {fileID: 2331954063627181358}
+  leverSound: {fileID: 8300000, guid: d66b3ce3d950cf34c9825471a5065d90, type: 3}
   influentialTarget: {fileID: 0}
   targetAnimator: {fileID: 0}
 --- !u!82 &2331954063627181358
