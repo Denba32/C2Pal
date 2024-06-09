@@ -1,30 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
+using UnityEngine.Animations;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
+
 public class PlayerController : MonoBehaviour
 {
-    public PlayerCondition condition;
-    public float staminaRecoveryDelay = 10f;
-    public float rollDuration = 1f;
+    PlayerInput Inputs;
+    bool isRunning = false;
 
     [Header("Attack")]
     [SerializeField] private float damage;
     [SerializeField] private BoxCollider meleeArea;
     [SerializeField] private TrailRenderer trailEffect;
     [SerializeField] private float force;
-    [SerializeField] private float UseSpecialAttackStamina;
 
     [Header("Animation")]
     [SerializeField] private Animator anim;
 
-    [Header("Roll")]
-    [SerializeField] private BoxCollider playerBody;
-
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpPower;
-    [SerializeField] private float sprintMultiplier = 2f;
-    [SerializeField] private float groundCheckDistance = 0.1f;
+    [SerializeField] private float jumppower;
+    [SerializeField] private float runSpeedMultiplierl = 2f;
     private float moveSpeedRestorer;
     private Vector2 curMovementInput;
 
@@ -38,10 +36,6 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseDelta;
 
     private Rigidbody _rb;
-    private Vector2 _movementInput;
-    public bool _isSprinting = false;
-    private bool _isGrounded = true;
-    private bool _isAttacking = false;
 
     private void Awake()
     {
@@ -60,29 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _isGrounded = IsGrounded();
 
-        if (_isGrounded && _movementInput.magnitude > 0)
-        {
-            if (_isSprinting)
-            {
-                anim.SetBool("IsRunning", true);
-                if(condition.uiconditions.stamina.curValue <= 1f)
-                {
-                    condition.uiconditions.health.Substract(10f * Time.deltaTime);
-                }
-                condition.uiconditions.stamina.Substract(3f * Time.deltaTime);
-            }
-            else
-            {
-                anim.SetBool("IsWalking", true);
-            }
-        }
-        else
-        {
-            anim.SetBool("IsWalking", false);
-            anim.SetBool("IsRunning", false);
-        }
     }
 
     private void LateUpdate()
@@ -92,58 +64,46 @@ public class PlayerController : MonoBehaviour
             CameraLook();
         }
     }
-  
+
     private void Move()
     {
-        Vector3 moveDirection = transform.forward * _movementInput.y + transform.right * _movementInput.x;
-        moveDirection *= _isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
-        moveDirection.y = _rb.velocity.y;
+        Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
+        dir *= moveSpeed;
+        dir.y = _rb.velocity.y;
 
-        _rb.velocity = moveDirection;
+        _rb.velocity = dir;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        _movementInput = context.ReadValue<Vector2>();
-
-        if (_movementInput != Vector2.zero)
+        if (context.phase == InputActionPhase.Performed)
         {
-            if (Keyboard.current.leftShiftKey.isPressed)
+            curMovementInput = context.ReadValue<Vector2>();
+
+            if (curMovementInput != Vector2.zero)
             {
-                _isSprinting = true;
-                anim.SetBool("IsRunning", true);
-                anim.SetBool("IsWalking", false);
-            }
-            else
-            {
-                _isSprinting = false;
-                anim.SetBool("IsRunning", false);
-                anim.SetBool("IsWalking", true);
+                if (Keyboard.current.leftShiftKey.isPressed)
+                {
+                    moveSpeed += 10;
+                    anim.SetBool("IsMove", false);
+                    anim.SetBool("IsRun", true);
+                }
+                else
+                {
+                    anim.SetBool("IsMove", true);
+                    anim.SetBool("IsRun", false);
+                }
             }
         }
-        else
+        else if (context.phase == InputActionPhase.Canceled )
         {
-            _isSprinting = false;
-            anim.SetBool("IsRunning", false);
-            anim.SetBool("IsWalking", false);
+            curMovementInput = Vector2.zero;
+            anim.SetBool("IsMove", false);
+            anim.SetBool("IsRun", false); // 뛰기 상태를 해제
+            moveSpeed = moveSpeedRestorer;
+
         }
     }
-    public void OnSprint(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Started)
-        {
-            _isSprinting = true;
-            anim.SetBool("IsRunning", true);
-            anim.SetBool("IsWalking", false);
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            _isSprinting = false;
-            anim.SetBool("IsRunning", false);
-            anim.SetBool("IsWalking", true);
-        }
-    }
-
 
 
     void CameraLook()
@@ -162,23 +122,12 @@ public class PlayerController : MonoBehaviour
         mouseDelta = context.ReadValue<Vector2>();
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+    public void Onjump(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed && _isGrounded)
+        if (context.phase == InputActionPhase.Started && IsGrounded())
         {
-            _rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-            _isGrounded = false;
+            _rb.AddForce(Vector2.up * jumppower, ForceMode.Impulse);
         }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        _isGrounded = CheckGrounded();
-    }
-
-    private bool CheckGrounded()
-    {
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayerMask);
     }
 
     bool IsGrounded()
@@ -193,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 1f, groundLayerMask))
+            if (Physics.Raycast(rays[i], 0.5f, groundLayerMask))
             {
                 return true;
             }
@@ -203,98 +152,20 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (!_isAttacking && context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Started)
         {
-            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue > UseSpecialAttackStamina)
-            {
-                StopCoroutine(SpecialAttackCoroutine());
-                StartCoroutine(SpecialAttackCoroutine());
-                condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
-                
-            }
-            else
-            {
-                StartCoroutine(AttackCoroutine());
-            }
+            anim.SetBool("IsAttack", true);
+            StopCoroutine("Swing");
+            StartCoroutine("Swing");
         }
-    }
-    public void OnRoll(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
+        else if (context.phase == InputActionPhase.Performed)
         {
-            StartCoroutine(Rolling());
-            condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
+            anim.SetBool("IsAttack", false);
         }
-    }
-    IEnumerator Rolling()
-    {
-
-        float originalMoveSpeed = moveSpeed;
-
-
-        Vector3 originalPosition = transform.position;
-        Vector3 targetPosition = originalPosition + transform.forward * 3f; // 이동 거리 조절 가능
-
-
-        float duration = 0.3f;
-        float elapsedTime = 0f;
-
-
-        Vector3 startPosition = originalPosition;
-
-
-        anim.SetBool("IsRoll", true);
-
-
-        while (elapsedTime < duration)
-        {
-
-            float distanceCovered = (elapsedTime / duration) * Vector3.Distance(startPosition, targetPosition);
-            transform.position = startPosition + transform.forward * distanceCovered;
-
-
-            playerBody.transform.position = transform.position;
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-
-        anim.SetBool("IsRoll", false);
-
-        transform.position = targetPosition;
-
-        playerBody.transform.position = transform.position;
-
-
-        moveSpeed = moveSpeedRestorer;
     }
     IEnumerator Swing()
     {
         moveSpeed = 0f;
-<<<<<<< Updated upstream
-        yield return new WaitForSeconds(0.1f); // 칼을 든다.
-        meleeArea.enabled = true;
-        trailEffect.enabled = true;
-
-        Vector3 originalPosition = transform.position;
-        Vector3 targetPosition = originalPosition + transform.forward * 0.5f; // 약간 앞으로간다.
-        float elapsedTime = 0f;
-        float duration = 0.3f; // 내려칠 때의 시간
-
-        while (elapsedTime < duration)
-        {
-            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        meleeArea.enabled = false;
-        _isAttacking = false;
-
-        yield return new WaitForSeconds(0.3f); // 다시든다.
-        trailEffect.enabled = false;
-=======
         yield return new WaitForSeconds(0.1f);
         // meleeArea.enabled = true;
         // trailEffect.enabled = true;
@@ -304,60 +175,9 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
         // trailEffect.enabled = false;
->>>>>>> Stashed changes
 
+        yield return new WaitForSeconds(0.1f);
         moveSpeed = moveSpeedRestorer;
-    }
-
-    IEnumerator Swing2()
-    {
-        moveSpeed = 0f;
-        yield return new WaitForSeconds(0.06f); // 칼을 든다.
-        meleeArea.enabled = true;
-        trailEffect.enabled = true;
-
-        Vector3 originalPosition = transform.position;
-        Vector3 targetPosition = originalPosition + transform.forward * 1f; //약간 앞으로(일반공격보다 조금더)간다.
-        float elapsedTime = 0f;
-        float duration = 0.44f; // 내려칠 때의 시간
-
-        while (elapsedTime < duration)
-        {
-            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        _isAttacking = false;
-
-        yield return new WaitForSeconds(0.3f); //다시든다.
-        meleeArea.enabled = false;
-        trailEffect.enabled = false;
-
-        moveSpeed = moveSpeedRestorer;
-    }
-
-    IEnumerator AttackCoroutine()
-    {
-        _isAttacking = true;
-        anim.SetBool("IsAttack", true);
-        StopCoroutine("Swing");
-        StartCoroutine("Swing");
-
-        yield return new WaitForSeconds(0f);
-
-        anim.SetBool("IsAttack", false);
-    }
-
-    IEnumerator SpecialAttackCoroutine()
-    {
-        _isAttacking = true;
-        anim.SetBool("IsSpecialAttack", true);
-        StopCoroutine("Swing2");
-        StartCoroutine("Swing2");
-
-        yield return new WaitForSeconds(0f);
-        anim.SetBool("IsSpecialAttack", false);
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
@@ -400,5 +220,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+
+
 }
