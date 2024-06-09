@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && _isGrounded)
+        if (context.phase == InputActionPhase.Performed && _isGrounded)
         {
             _rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
             _isGrounded = false;
@@ -214,7 +214,7 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 0.5f, groundLayerMask))
+            if (Physics.Raycast(rays[i], 1f, groundLayerMask))
             {
                 return true;
             }
