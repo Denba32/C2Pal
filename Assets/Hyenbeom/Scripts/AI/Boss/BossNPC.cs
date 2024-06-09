@@ -90,7 +90,7 @@ public class BossNPC : MonoBehaviour, IDamagable
         maxHealth = statSO.health;
         scracthCollider.enabled = false; // 부모의 OnCollisionEnter는 자식 Collider에도 영향을 받을 수 있다..
         ChangeState(AIState.Idle);
-        //Invoke("Enter2Phase", 10f); // 원래조건 체력이 반 이상 떨어졌을 때 발동시킬 것
+        Invoke("Enter2Phase", 10f); // 페이즈 진입 테스트용
 
         // 돌진기 같은 거 케어
         NavMeshPath path = new NavMeshPath();
@@ -101,7 +101,7 @@ public class BossNPC : MonoBehaviour, IDamagable
     void Update()
     {
         // 추후에 정지가 있으면 넣어줄 것
-        if (aiState == AIState.Dead || aiState == AIState.Busy) { return; }
+        if (aiState == AIState.Dead || pattern == BattlePattern.Rush) { return; }
         // 플레이어 감지
         if (CharacterManager.Instance.Player != null)
         {
@@ -278,7 +278,21 @@ public class BossNPC : MonoBehaviour, IDamagable
 
     IEnumerator ReadyToRush()
     {
-        agent.SetDestination(usePosition + Vector3.back * 2);
+        switch (forwardAngle)   // 설정 반환 전환용
+        {
+            case AngleState.forward:
+                agent.SetDestination(usePosition - Vector3.forward * 2);
+                break;
+            case AngleState.back:
+                agent.SetDestination(usePosition - Vector3.back * 2);
+                break;
+            case AngleState.left:
+                agent.SetDestination(usePosition - Vector3.left * 2);
+                break;
+            case AngleState.right:
+                agent.SetDestination(usePosition - Vector3.right * 2);
+                break;
+        }
         yield return new WaitUntil(() => agent.remainingDistance < 0.1f);
 
         switch (forwardAngle)   // 설정 반환 전환용
@@ -287,13 +301,13 @@ public class BossNPC : MonoBehaviour, IDamagable
                 agent.SetDestination(transform.position + Vector3.forward * 2);
                 break;
             case AngleState.back:
-                agent.SetDestination(transform.position + Vector3.forward * 2);
+                agent.SetDestination(transform.position + Vector3.back * 2);
                 break;
             case AngleState.left:
-                agent.SetDestination(transform.position + Vector3.forward * 2);
+                agent.SetDestination(transform.position + Vector3.left * 2);
                 break;
             case AngleState.right:
-                agent.SetDestination(transform.position + Vector3.forward * 2);
+                agent.SetDestination(transform.position + Vector3.right * 2);
                 break;
         }
         yield return new WaitUntil(() => agent.remainingDistance < 0.05f);
@@ -381,6 +395,7 @@ public class BossNPC : MonoBehaviour, IDamagable
 
     public void Damage(float damage)
     {
+        if (pattern == BattlePattern.Rush) { Debug.Log("지금은 때릴 수 없어"); }
         currentHealth -= damage;
 
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
