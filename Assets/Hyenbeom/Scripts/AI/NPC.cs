@@ -23,6 +23,7 @@ public class NPC : MonoBehaviour, IDamagable
     protected NavMeshAgent agent;
     protected Collider _collider;
 
+    public Transform dropPosition;
     // private SkinnedMeshRenderer[] meshRenderers;
 
     // 플레이어 거리 구하기
@@ -194,7 +195,7 @@ public class NPC : MonoBehaviour, IDamagable
                 Vector3 spawnPoint = transform.position + Random.onUnitSphere;
                 if (Physics.Raycast(transform.position + Vector3.up * 20, -transform.up, out RaycastHit hit, 30f, dropableLayer)) // 이 방법은 천장을 조심해야할 것..
                 {
-                    GameObject item = Instantiate(loot, new Vector3(spawnPoint.x, hit.point.y, spawnPoint.z), Quaternion.identity);
+                    GameObject item = Instantiate(loot, dropPosition.position, Quaternion.identity);
                     dropItems.Add(item);
                     break;
                 }

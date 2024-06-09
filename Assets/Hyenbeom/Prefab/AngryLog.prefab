@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 285948658240701563}
   - component: {fileID: 3355003534269210865}
   - component: {fileID: 7252640957121876597}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AngryLog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ MonoBehaviour:
   statSO: {fileID: 11400000, guid: 245315bc5f431ae449fff2ea44b0be13, type: 2}
   dropableLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
 --- !u!195 &7252640957121876597
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 638727299112168753}
   - component: {fileID: 2660294707645780549}
   - component: {fileID: 8543471741997513934}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ParticleLeaves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4861,7 +4861,7 @@ GameObject:
   - component: {fileID: 7539941242780283565}
   - component: {fileID: 7840398758000947868}
   - component: {fileID: 2799689899924244557}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Leaf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4942,7 +4942,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1040238540383616613}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RootIK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4975,7 +4975,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1128524496877890296}
   - component: {fileID: 7532579733787488296}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5065,7 +5065,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6046845647320030957}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Joint_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5097,7 +5097,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4718529017759125437}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Joint_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5131,7 +5131,7 @@ GameObject:
   - component: {fileID: 5846824012314839517}
   - component: {fileID: 7957724680789626968}
   - component: {fileID: 233385443862628744}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ArmAxe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5214,7 +5214,7 @@ GameObject:
   - component: {fileID: 77333791455841612}
   - component: {fileID: 3383568107400371424}
   - component: {fileID: 6810477055007091773}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ParticleSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10054,7 +10054,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5470776181740355639}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FullBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10093,7 +10093,7 @@ GameObject:
   - component: {fileID: 3489889508941072204}
   - component: {fileID: 2034709651150023723}
   - component: {fileID: 9066099682552928433}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LegRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10175,7 +10175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4561900709959990368}
   - component: {fileID: 5647432632407757307}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AngryLog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10230,7 +10230,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6287259002477037339}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Joint_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10264,7 +10264,7 @@ GameObject:
   - component: {fileID: 541517666159652685}
   - component: {fileID: 929645407003138539}
   - component: {fileID: 7079594558997577648}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10347,7 +10347,7 @@ GameObject:
   - component: {fileID: 3280700515306880993}
   - component: {fileID: 4876618778588883016}
   - component: {fileID: 307989901144438256}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LegLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10428,7 +10428,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 157624449121014598}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Joint_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10459,7 +10459,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1688921404613292772}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Joint_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
