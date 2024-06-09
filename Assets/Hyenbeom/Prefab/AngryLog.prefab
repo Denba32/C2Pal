@@ -100,6 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 5647432632407757307}
   statSO: {fileID: 11400000, guid: 245315bc5f431ae449fff2ea44b0be13, type: 2}
+  dropableLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!195 &7252640957121876597
 NavMeshAgent:
   m_ObjectHideFlags: 0

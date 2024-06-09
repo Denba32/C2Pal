@@ -27,6 +27,10 @@ public class EnemyNPC : MonoBehaviour
     // 스폰지점에서 소환됐다면 내 스폰 지점
     private GameObject spawnPoint;
 
+    // 아이템 제거할 때 사용
+    public LayerMask dropableLayer;
+    protected List<GameObject> dropItems = new List<GameObject>();
+
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -95,6 +99,7 @@ public class EnemyNPC : MonoBehaviour
                 animator.SetBool("Dead", true);
                 _collider.isTrigger = true; // 통과 시키게 하기 위해서
                 StartCoroutine(DestroyMess());
+                DropItem();
                 break;
         }
     }
@@ -169,6 +174,25 @@ public class EnemyNPC : MonoBehaviour
         Vector3 directionToPlayer = CharacterManager.Instance.Player.transform.position - transform.position;
         float angle = Vector3.Angle(transform.forward, directionToPlayer);
         return angle < statSO.fieldOfView * 0.5f;
+    }
+
+    protected virtual void DropItem()
+    {
+        foreach (GameObject loot in statSO.dropOnDeath)
+        {
+            int i = 0;
+            while (i < 5)
+            {
+                Vector3 spawnPoint = transform.position + Random.onUnitSphere;
+                if (Physics.Raycast(transform.position + Vector3.up * 20, -transform.up, out RaycastHit hit, 30f, dropableLayer)) // 이 방법은 천장을 조심해야할 것..
+                {
+                    GameObject item = Instantiate(loot, new Vector3(spawnPoint.x, hit.point.y, spawnPoint.z), Quaternion.identity);
+                    dropItems.Add(item);
+                    break;
+                }
+                i++;
+            }
+        }
     }
 
     protected virtual IEnumerator DestroyMess()
