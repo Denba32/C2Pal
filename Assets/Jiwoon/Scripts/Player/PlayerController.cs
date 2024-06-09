@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     private Vector2 _movementInput;
     public bool _isSprinting = false;
-    private bool _isGrounded = true;
+    public bool _isGrounded = true;
     private bool _isAttacking = false;
 
     private bool isPause = false;
@@ -71,6 +71,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _isGrounded = IsGrounded();
+
+        Debug.Log(_isGrounded + "바닥 판단 여부");
 
         if (_isGrounded && _movementInput.magnitude > 0)
         {
