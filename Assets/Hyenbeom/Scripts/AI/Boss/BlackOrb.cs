@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlackOrb : MonoBehaviour
 {
-    public BossSO statS0;
+    public BossSO statSO;
 
     void Start()
     {
@@ -22,7 +22,7 @@ public class BlackOrb : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("구체에 맞았습니다!");
+            CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
             DestroyObject();
         }
     }

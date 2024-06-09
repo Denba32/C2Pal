@@ -11,7 +11,7 @@ public class BossScratch : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().Damage(statSO.damage);
+            CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
         }
     }
 

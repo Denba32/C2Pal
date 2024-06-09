@@ -33,7 +33,7 @@ public class BossShadow : MonoBehaviour
     void RandomSpawn()
     {
         float randomSide = Random.Range(-maxSideDistance, maxSideDistance);
-        if (isTrueXFalseZ) // 참이면 X false면 z입니다.
+        if (isTrueXFalseZ) // 참이면 x side false면 z side입니다.
         {
             transform.position = new Vector3(randomSide, spawnPoint.y, spawnPoint.z);
         }
@@ -54,7 +54,7 @@ public class BossShadow : MonoBehaviour
         if(other.gameObject.CompareTag("Player") && isDamaged == false)
         {
             isDamaged = true;
-            CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().Damage(damage);
+            CharacterManager.Instance.Player.condition.uiconditions.health.Substract(damage);
         }
     }
 

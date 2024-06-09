@@ -6,6 +6,14 @@ using UnityEngine.AI;
 using UnityEngine.Pool;
 using static UnityEngine.GraphicsBuffer;
 
+public enum AngleState
+{
+    forward,
+    back,
+    left,
+    right
+}
+
 public class BossNPC : MonoBehaviour, IDamagable
 {
     // 필요한 컴포넌트
@@ -42,6 +50,7 @@ public class BossNPC : MonoBehaviour, IDamagable
     public float maxSideDistance;
     public bool isTrueXFalseZ;
     private IObjectPool<BossShadow> _Pool;
+    public AngleState forwardAngle;
 
     // 이건 animator 접근용
     public bool activateSpawnShadow;
@@ -68,7 +77,6 @@ public class BossNPC : MonoBehaviour, IDamagable
 
     // SO
     public BossSO statSO;
-    
 
     void Awake()
     {
@@ -246,7 +254,7 @@ public class BossNPC : MonoBehaviour, IDamagable
             if (pattern == BattlePattern.Dash && DashDamagedActive)
             {
                 DashDamagedActive = false;
-                CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().Damage(statSO.damage);
+                CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
             }
         }
     }
@@ -271,10 +279,23 @@ public class BossNPC : MonoBehaviour, IDamagable
     IEnumerator ReadyToRush()
     {
         agent.SetDestination(usePosition + Vector3.back * 2);
-        yield return new WaitUntil(() => agent.remainingDistance < 0.1f); // 이 단계에서 지멋대로 풀림;
+        yield return new WaitUntil(() => agent.remainingDistance < 0.1f);
 
-        agent.SetDestination(transform.position + Vector3.forward * 2);
-
+        switch (forwardAngle)   // 설정 반환 전환용
+        {
+            case AngleState.forward:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+            case AngleState.back:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+            case AngleState.left:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+            case AngleState.right:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+        }
         yield return new WaitUntil(() => agent.remainingDistance < 0.05f);
 
         animator.SetBool("Run", false);
