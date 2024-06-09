@@ -55,10 +55,16 @@ public class PlayerController : MonoBehaviour
         moveSpeedRestorer = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
 
+        condition = CharacterManager.Instance.Player.condition;
+
         GameManager.Instance.onGamePause += PausePlayer;
         GameManager.Instance.onGameStart += PlayPlayer;
+    }
 
-
+    private void OnDestroy()
+    {
+        GameManager.Instance.onGamePause -= PausePlayer;
+        GameManager.Instance.onGameStart -= PlayPlayer;
     }
     private void FixedUpdate()
     {
@@ -71,8 +77,6 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _isGrounded = IsGrounded();
-
-        Debug.Log(_isGrounded + "바닥 판단 여부");
 
         if (_isGrounded && _movementInput.magnitude > 0)
         {
@@ -158,7 +162,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
     void CameraLook()
     {
         if (Time.timeScale > 0f)
@@ -177,21 +180,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed && _isGrounded)
+        if (context.phase == InputActionPhase.Started && _isGrounded)
         {
-            _rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            _rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
             _isGrounded = false;
         }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        _isGrounded = CheckGrounded();
-    }
-
-    private bool CheckGrounded()
-    {
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayerMask);
     }
 
     public void OnInventory(InputAction.CallbackContext context)
@@ -249,23 +242,17 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator Rolling()
     {
-
         float originalMoveSpeed = moveSpeed;
-
 
         Vector3 originalPosition = transform.position;
         Vector3 targetPosition = originalPosition + transform.forward * 3f; // 이동 거리 조절 가능
 
-
         float duration = 0.3f;
         float elapsedTime = 0f;
 
-
         Vector3 startPosition = originalPosition;
 
-
         anim.SetBool("IsRoll", true);
-
 
         while (elapsedTime < duration)
         {
@@ -280,13 +267,11 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-
         anim.SetBool("IsRoll", false);
 
         transform.position = targetPosition;
 
         playerBody.transform.position = transform.position;
-
 
         moveSpeed = moveSpeedRestorer;
     }
@@ -374,19 +359,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void OnOpenInventory(InputAction.CallbackContext context)
-    {
-        if (Time.timeScale == 0f)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1f;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-            Time.timeScale = 0f;
-        }
-    }
 
     public void OnOpenOptions(InputAction.CallbackContext context)
     {

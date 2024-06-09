@@ -2588,6 +2588,9 @@ GameObject:
   - component: {fileID: 385358043103055134}
   - component: {fileID: 4903273255802813858}
   - component: {fileID: 7336557836002592354}
+  - component: {fileID: 7593690430375532827}
+  - component: {fileID: 1899931181653426596}
+  - component: {fileID: 1483745395713153243}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -2725,6 +2728,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 660b8123-56e1-429e-9dff-b0d6b60341ac
     m_ActionName: PlayerActions/OpenOptions[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 906d2c39-ea0b-432d-9a11-038044aab28f
+    m_ActionName: PlayerActions/Sprint[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6010591e-709a-44ee-af7f-343f09083aa4
+    m_ActionName: PlayerActions/Inventroy[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerActions
@@ -2744,9 +2755,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   condition: {fileID: 0}
-  primaryWeapon: {fileID: 0}
-  secondaryWeapon: {fileID: 0}
-  itemData: {fileID: 0}
+  inventory:
+    maxCapacity: 0
+    gold: 0
+    uiPrefab: {fileID: 0}
+  dropPosition: {fileID: 0}
+  primaryWeapon: {fileID: 1899931181653426596}
+  secondaryWeapon: {fileID: 1483745395713153243}
+  ITData: {fileID: 0}
 --- !u!114 &5841758007152239077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2759,14 +2775,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2823c1d2a2f285d4db038058522a6e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  condition: {fileID: 0}
+  staminaRecoveryDelay: 10
+  rollDuration: 1
   damage: 0
   meleeArea: {fileID: 6501996764367884382}
   trailEffect: {fileID: 8911662168295990108}
   force: 0
+  UseSpecialAttackStamina: 0
   anim: {fileID: 0}
+  playerBody: {fileID: 0}
   moveSpeed: 10
-  jumppower: 50
-  runSpeedMultiplierl: 2
+  jumpPower: 0
+  sprintMultiplier: 2
+  groundCheckDistance: 0.1
   cameraContainer: {fileID: 2072315207948815476}
   minXlook: 0
   maxXlook: 0
@@ -2774,6 +2796,8 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 55
+  _isSprinting: 0
+  _isGrounded: 1
 --- !u!54 &6360569753730618332
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2838,7 +2862,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'goggle'\n\tTransform 'goggle'\n\tFrom animation
+    clip 'Idle_SwordShield'\n\tFrom animation clip 'Run_SwordShield'\n\tFrom animation
+    clip 'NormalAttack01_SwordShield'\n\tFrom animation clip 'NormalAttack02_SwordShield'\n\tFrom
+    animation clip 'Sprint_SwordShield'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -2858,6 +2887,59 @@ MonoBehaviour:
   uiconditions: {fileID: 0}
   condition: {fileID: 0}
   noHungerHealthDecay: 2
+--- !u!114 &7593690430375532827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748078129396412456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbf37d9126786b4c98428d406ff4f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 2
+  checkRate: 0.05
+  maxCheckDistance: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  detectedObject: []
+  curInteractGameObject: {fileID: 0}
+  promptObj: {fileID: 0}
+  promptText: {fileID: 0}
+  pickupIcon: {fileID: 0}
+  useIcon: {fileID: 0}
+  talkIcon: {fileID: 0}
+--- !u!114 &1899931181653426596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748078129396412456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647ac0c9ed9f2f14582bbecf8e3dbf69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curEquip: {fileID: 0}
+  equipPos: {fileID: 1167485804199513165}
+--- !u!114 &1483745395713153243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748078129396412456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647ac0c9ed9f2f14582bbecf8e3dbf69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curEquip: {fileID: 0}
+  equipPos: {fileID: 6413072565711487145}
 --- !u!1 &8756767125512862578
 GameObject:
   m_ObjectHideFlags: 0
