@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,13 +27,17 @@ public class PlayerCondition : MonoBehaviour
         {
             Die();
         }
-        
+    }
+
+    public void RestoreStamina(float amount)
+    {
+        stamina.Add(amount);
     }
     public bool Heal(float amount)
     {
-        if(health.curValue + amount > health.maxValue)
+        if (health.curValue + amount > health.maxValue)
         {
-            Debug.Log("HP°¡ ÀÌ¹Ì Max »óÅÂÀÔ´Ï´Ù.");
+            Debug.Log("HPï¿½ï¿½ ï¿½Ì¹ï¿½ Max ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
             return false;
         }
 
@@ -46,13 +50,8 @@ public class PlayerCondition : MonoBehaviour
         hunger.Add(amount);
     }
 
-    public void RestoreStamina(float amount)
-    {
-        stamina.Add(amount);
-    }
-
     private void Die()
     {
-        Debug.Log("´ç½ÅÀº Á×¾ú½À´Ï´Ù!");
+        Debug.Log("ë‹¹ì‹ ì€ ì£½ì—ˆìŠµë‹ˆë‹¤!");
     }
 }
