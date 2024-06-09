@@ -293,6 +293,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator Swing()
     {
         moveSpeed = 0f;
+<<<<<<< Updated upstream
         yield return new WaitForSeconds(0.1f); // 칼을 든다.
         meleeArea.enabled = true;
         trailEffect.enabled = true;
@@ -314,6 +315,17 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f); // 다시든다.
         trailEffect.enabled = false;
+=======
+        yield return new WaitForSeconds(0.1f);
+        // meleeArea.enabled = true;
+        // trailEffect.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        _rb.AddForce(transform.forward * 10f * Time.timeScale, ForceMode.VelocityChange );
+        // meleeArea.enabled = false;
+
+        yield return new WaitForSeconds(0.3f);
+        // trailEffect.enabled = false;
+>>>>>>> Stashed changes
 
         moveSpeed = moveSpeedRestorer;
     }
