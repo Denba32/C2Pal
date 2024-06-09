@@ -70,7 +70,8 @@ public class RabbitClass : NPC
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
                 _collider.isTrigger = true; // 통과 시키게 하기 위해서
-                Invoke("Destroy", 30f);
+                DropItem();
+                StartCoroutine(DestroyMess());
                 break;
         }
     }
@@ -117,9 +118,17 @@ public class RabbitClass : NPC
         }
     }
 
-    protected override void Destroy()
+    protected override IEnumerator DestroyMess()
     {
-        home.GetComponent<RabbitHole>().RabbitDead(this.gameObject);
+        yield return new WaitForSeconds(15f);
+        if (home != null)
+        {
+            home.GetComponent<RabbitHole>().RabbitDead(this.gameObject);
+        }
+        foreach (GameObject item in dropItems)
+        {
+            Destroy(item);
+        }
         Destroy(this.gameObject);
     }
 }
