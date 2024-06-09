@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RightHand : MonoBehaviour
@@ -7,11 +8,18 @@ public class RightHand : MonoBehaviour
     private float Health = 10;
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Enemy"))
         {
-            Health -= 1;
-            Debug.Log($"적을 공격했습니다. 적의 체력이 {Health} 만큼 남었습니다.");
+            IDamagable[] damages = other.GetComponentsInParent<IDamagable>();
+
+            for(int i = 0; i < damages.Length; i++)
+            {
+                if (damages[i] != null)
+                {
+                    damages[i].Damage(10);
+                    Debug.Log("데미지 주기");
+                }
+            }
         }
            
     }

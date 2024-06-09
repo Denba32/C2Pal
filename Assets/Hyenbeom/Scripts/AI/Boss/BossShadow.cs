@@ -11,12 +11,17 @@ public class BossShadow : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
 
     public float dashSpeed;
+    public float damage;
     private bool isDamaged;
 
     private IObjectPool<BossShadow> _ManagedPool;
     private Vector3 spawnPoint;    // 스폰 시점 (y는 무조건 고정, x, z는 알아서 설정하도록)
     private float maxSideDistance; // 소환할 때 좌우 시점
-    private bool isTrueXFalseZ; 
+    private bool isTrueXFalseZ;
+
+    public AngleState angleState = AngleState.forward;
+
+    private NavMeshHit hit;
 
     void Start()
     {
@@ -32,20 +37,38 @@ public class BossShadow : MonoBehaviour
     void RandomSpawn()
     {
         float randomSide = Random.Range(-maxSideDistance, maxSideDistance);
-        if (isTrueXFalseZ) // 참이면 X false면 z입니다.
+        if (isTrueXFalseZ) // 참이면 x side false면 z side입니다.
         {
-            transform.position = new Vector3(randomSide, spawnPoint.y, spawnPoint.z);
+            transform.localPosition = new Vector3(randomSide, spawnPoint.y, spawnPoint.z);
         }
         else
         {
-            transform.position = new Vector3(spawnPoint.x, spawnPoint.y, randomSide);
+            transform.localPosition = new Vector3(spawnPoint.x, spawnPoint.y, randomSide);
         }
 
         agent.acceleration = 25f;
         agent.speed = 25f;
         animator.SetBool("Run", true);
-        NavMesh.SamplePosition(transform.position + (Vector3.forward * 100f), out NavMeshHit hit, 100f, NavMesh.AllAreas);
+
+        
+        switch(angleState)
+        {
+            case AngleState.forward:
+                NavMesh.SamplePosition(transform.position + (Vector3.forward * 100f), out  hit, 100f, NavMesh.AllAreas);
+                break;
+            case AngleState.back:
+                NavMesh.SamplePosition(transform.position + (Vector3.back * 100f), out  hit, 100f, NavMesh.AllAreas);
+                break;
+            case AngleState.right:
+                NavMesh.SamplePosition(transform.position + (Vector3.right * 100f), out  hit, 100f, NavMesh.AllAreas);
+                break;
+            case AngleState.left:
+                NavMesh.SamplePosition(transform.position + (Vector3.left * 100f), out  hit, 100f, NavMesh.AllAreas);
+                break;
+        }
         agent.SetDestination(hit.position);
+
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,25 +76,27 @@ public class BossShadow : MonoBehaviour
         if(other.gameObject.CompareTag("Player") && isDamaged == false)
         {
             isDamaged = true;
-            Debug.Log("그림자 습격에 맞았습니다1");
+            CharacterManager.Instance.Player.condition.uiconditions.health.Substract(damage);
         }
     }
 
     void Update()
     {
-        if (agent.remainingDistance < 0.2f)
+        if (agent.remainingDistance < 1.0f)
         {
             DestroyShadow();
         }
     }
 
     // 페이즈 2를 위한 것
-    public void InitObject(Vector3 _spawnPosition, float _maxDistance, bool _isTrueXFalseZ, float _dashSpeed)
+    public void InitObject(Vector3 _spawnPosition, float _maxDistance, bool _isTrueXFalseZ, float _dashSpeed, float _damage, AngleState _angleState)
     {
         spawnPoint = _spawnPosition;
         maxSideDistance = _maxDistance;
         isTrueXFalseZ = _isTrueXFalseZ;
         dashSpeed = _dashSpeed;
+        damage = _damage;
+        angleState = _angleState;
     }
 
     public void SetManagedPool(IObjectPool<BossShadow> pool)

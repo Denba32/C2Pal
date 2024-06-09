@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5967581182696693621}
   - component: {fileID: 3768155790829682202}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MushroomMon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,7 +64,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3104064471833327612}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bone002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 644203156903054190}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bone003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 3062694259566463640}
   - component: {fileID: 865128342214032010}
   - component: {fileID: 8027344834271579750}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ MonoBehaviour:
   statSO: {fileID: 11400000, guid: 00440a76f522f6343b99d2c40c4accb9, type: 2}
   dropableLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
 --- !u!195 &8027344834271579750
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4660325145579868487}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Dummy001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5931990877971269794}
   - component: {fileID: 3890338335869425810}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MushroomMon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +372,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5147684013536592524}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bone001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum AIState
+public enum AIState 
 {
     Idle,
     Wandering,
@@ -16,13 +16,14 @@ public enum AIState
     Dead = 10
 } // 공격이나 다른 건 추후에 추가할 것
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, IDamagable
 {
     // 필요한 컴포넌트
     protected Animator animator;
     protected NavMeshAgent agent;
     protected Collider _collider;
 
+    public Transform dropPosition;
     // private SkinnedMeshRenderer[] meshRenderers;
 
     // 플레이어 거리 구하기
@@ -30,6 +31,8 @@ public class NPC : MonoBehaviour
 
     // 상태
     protected AIState aiState;
+    float currentHealth;
+    float maxHealth;
 
     // SO
     public AnimalSO statSO;
@@ -47,6 +50,8 @@ public class NPC : MonoBehaviour
 
     void Start() 
     {
+        currentHealth = statSO.health;
+        maxHealth = statSO.health;
         ChangeState(AIState.Wandering);
     }
 
@@ -190,7 +195,7 @@ public class NPC : MonoBehaviour
                 Vector3 spawnPoint = transform.position + Random.onUnitSphere;
                 if (Physics.Raycast(transform.position + Vector3.up * 20, -transform.up, out RaycastHit hit, 30f, dropableLayer)) // 이 방법은 천장을 조심해야할 것..
                 {
-                    GameObject item = Instantiate(loot, new Vector3(spawnPoint.x, hit.point.y, spawnPoint.z), Quaternion.identity);
+                    GameObject item = Instantiate(loot, dropPosition.position, Quaternion.identity);
                     dropItems.Add(item);
                     break;
                 }
@@ -208,5 +213,18 @@ public class NPC : MonoBehaviour
             Destroy(item);
         }
         Destroy(this.gameObject);
+    }
+
+    // 데미지 관련
+    public void Damage(float damage)
+    {
+        currentHealth -= damage;
+
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        if (currentHealth <= 0f)
+        {
+            ChangeState(AIState.Dead);
+        }
     }
 }

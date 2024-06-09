@@ -439,7 +439,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiconditions: {fileID: 0}
-  condition: {fileID: 0}
   noHungerHealthDecay: 2
 --- !u!114 &8276633123156622027
 MonoBehaviour:
@@ -2788,7 +2787,7 @@ Transform:
   m_GameObject: {fileID: 8086302018846931040}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: -6}
+  m_LocalPosition: {x: 0, y: 6, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
