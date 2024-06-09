@@ -48,8 +48,6 @@ public abstract class EquipItem : ItemObject
         {
             OnHit(other);
         }
-
-
     }
 
     // 무언가에 충격을 줬을 때

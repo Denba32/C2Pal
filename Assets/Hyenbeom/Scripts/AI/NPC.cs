@@ -10,7 +10,8 @@ public enum AIState
     Wandering,
     Flee,
     Attack,
-    Busy,
+    Hit = 7,
+    Busy = 8,
     GoingHome = 9,
     Dead = 10
 } // 공격이나 다른 건 추후에 추가할 것
@@ -203,6 +204,7 @@ public class NPC : MonoBehaviour
         yield return new WaitForSeconds(15f);
         foreach (GameObject item in dropItems)
         {
+            if (item == null) { continue; } // 이미 주운 거 오류 방지용
             Destroy(item);
         }
         Destroy(this.gameObject);

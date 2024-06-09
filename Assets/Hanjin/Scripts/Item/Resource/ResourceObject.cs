@@ -17,7 +17,7 @@ public class ResourceObject : MonoBehaviour
     {
         if (aSource.isPlaying)
             aSource.Stop();
-        aSource.PlayOneShot(hitSound, 0.5f);
+        aSource.PlayOneShot(hitSound, 1.0f);
         for (int i = 0; i < power; i++)
         {
             if (capacity <= 0) break;
