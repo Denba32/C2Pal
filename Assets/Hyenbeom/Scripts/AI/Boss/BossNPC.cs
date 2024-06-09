@@ -77,7 +77,7 @@ public class BossNPC : MonoBehaviour
     {
         scracthCollider.enabled = false; // 부모의 OnCollisionEnter는 자식 Collider에도 영향을 받을 수 있다..
         ChangeState(AIState.Idle);
-        Invoke("Enter2Phase", 10f); // 원래조건 체력이 반 이상 떨어졌을 때 발동시킬 것
+        //Invoke("Enter2Phase", 10f); // 원래조건 체력이 반 이상 떨어졌을 때 발동시킬 것
 
         // 돌진기 같은 거 케어
         NavMeshPath path = new NavMeshPath();
@@ -133,6 +133,7 @@ public class BossNPC : MonoBehaviour
                 animator.speed = 1f;
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
+                StopAllCoroutines();
                 // 추후에 시체 통과시킬 방법을 찾을 것... (아니면 모든 Trigger를 꺼놓는 게 좋음.)
                 StartCoroutine(DestroyMess());
                 break;
@@ -349,7 +350,7 @@ public class BossNPC : MonoBehaviour
     // 스테이지가 넘어간다면 호출할 것
     protected virtual IEnumerator DestroyMess()
     {
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(90f);
         Destroy(this.gameObject);
     }
 }

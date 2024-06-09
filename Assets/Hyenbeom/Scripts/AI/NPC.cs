@@ -35,7 +35,7 @@ public class NPC : MonoBehaviour
 
     // 드롭을 위한 것
     public LayerMask dropableLayer;
-    protected List<GameObject> dropItems;
+    protected List<GameObject> dropItems = new List<GameObject>();
 
     void Awake()
     {
@@ -98,8 +98,8 @@ public class NPC : MonoBehaviour
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
                 _collider.isTrigger = true; // 통과 시키게 하기 위해서
-                DropItem(); // 드랍 아이템
                 StartCoroutine(DestroyMess());
+                DropItem(); // 드랍 아이템
                 break;
         }
     }
@@ -184,7 +184,7 @@ public class NPC : MonoBehaviour
         foreach (GameObject loot in statSO.dropOnDeath)
         {
             int i = 0;
-            while (i < 30)
+            while (i < 5)
             {
                 Vector3 spawnPoint = transform.position + Random.onUnitSphere;
                 if (Physics.Raycast(transform.position + Vector3.up * 20, -transform.up, out RaycastHit hit, 30f, dropableLayer)) // 이 방법은 천장을 조심해야할 것..
@@ -195,7 +195,6 @@ public class NPC : MonoBehaviour
                 }
                 i++;
             }
-            
         }
     }
 

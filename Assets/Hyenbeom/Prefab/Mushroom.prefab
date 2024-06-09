@@ -186,8 +186,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3623362365587192924}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 5
+  m_Drag: 2
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -219,6 +219,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 3768155790829682202}
   statSO: {fileID: 11400000, guid: 00440a76f522f6343b99d2c40c4accb9, type: 2}
+  dropableLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!195 &8027344834271579750
 NavMeshAgent:
   m_ObjectHideFlags: 0
