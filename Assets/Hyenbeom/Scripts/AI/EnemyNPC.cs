@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyNPC : MonoBehaviour
+public class EnemyNPC : MonoBehaviour, IDamagable
 {
     // 필요한 컴포넌트
     [SerializeField] // 몇몇 애니메이션은 이곳을 통해서 받아와야함;; (사실상 SO의 도움을 받기 힘듬..)
@@ -17,6 +17,8 @@ public class EnemyNPC : MonoBehaviour
 
     // 상태
     AIState aiState;
+    float currentHealth;
+    float maxHealth;
 
     // SO
     public EnemySO statSO;
@@ -39,6 +41,8 @@ public class EnemyNPC : MonoBehaviour
 
     void Start()
     {
+        currentHealth = statSO.health;
+        maxHealth = statSO.health;
         ChangeState(AIState.Wandering);
     }
 
@@ -209,5 +213,21 @@ public class EnemyNPC : MonoBehaviour
             Destroy(item);
         }
         Destroy(this.gameObject);
+    }
+
+    public void Damage(float damage)
+    {
+        currentHealth -= damage;
+
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        if (currentHealth > 0f)
+        {
+            ChangeState(AIState.Hit);
+        }
+        else if (currentHealth <= 0f)
+        {
+            ChangeState(AIState.Dead);
+        }
     }
 }

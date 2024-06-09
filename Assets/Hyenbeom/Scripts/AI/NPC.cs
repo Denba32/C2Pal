@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum AIState
+public enum AIState 
 {
     Idle,
     Wandering,
@@ -16,7 +16,7 @@ public enum AIState
     Dead = 10
 } // 공격이나 다른 건 추후에 추가할 것
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, IDamagable
 {
     // 필요한 컴포넌트
     protected Animator animator;
@@ -30,6 +30,8 @@ public class NPC : MonoBehaviour
 
     // 상태
     protected AIState aiState;
+    float currentHealth;
+    float maxHealth;
 
     // SO
     public AnimalSO statSO;
@@ -47,6 +49,8 @@ public class NPC : MonoBehaviour
 
     void Start() 
     {
+        currentHealth = statSO.health;
+        maxHealth = statSO.health;
         ChangeState(AIState.Wandering);
     }
 
@@ -208,5 +212,18 @@ public class NPC : MonoBehaviour
             Destroy(item);
         }
         Destroy(this.gameObject);
+    }
+
+    // 데미지 관련
+    public void Damage(float damage)
+    {
+        currentHealth -= damage;
+
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        if (currentHealth <= 0f)
+        {
+            ChangeState(AIState.Dead);
+        }
     }
 }

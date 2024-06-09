@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.Pool;
 using static UnityEngine.GraphicsBuffer;
 
-public class BossNPC : MonoBehaviour
+public class BossNPC : MonoBehaviour, IDamagable
 {
     // 필요한 컴포넌트
     [SerializeField] // 몇몇 애니메이션은 이곳을 통해서 받아와야함;; (사실상 SO로 건네받기 힘듬..)
@@ -49,6 +49,9 @@ public class BossNPC : MonoBehaviour
     // 상태
     AIState aiState;
     private float currentmagnification = 1f;
+    private bool isPhaseTwo = false;
+    float currentHealth;
+    float maxHealth;
 
     // 공격패턴
     public enum BattlePattern
@@ -75,6 +78,8 @@ public class BossNPC : MonoBehaviour
 
     void Start()
     {
+        currentHealth = statSO.health;
+        maxHealth = statSO.health;
         scracthCollider.enabled = false; // 부모의 OnCollisionEnter는 자식 Collider에도 영향을 받을 수 있다..
         ChangeState(AIState.Idle);
         //Invoke("Enter2Phase", 10f); // 원래조건 체력이 반 이상 떨어졌을 때 발동시킬 것
@@ -352,5 +357,22 @@ public class BossNPC : MonoBehaviour
     {
         yield return new WaitForSeconds(90f);
         Destroy(this.gameObject);
+    }
+
+    public void Damage(float damage)
+    {
+        currentHealth -= damage;
+
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        if (currentHealth <= maxHealth * 0.5f && !isPhaseTwo)
+        {
+            isPhaseTwo = true;
+            Enter2Phase();
+        }
+        else if (currentHealth <= 0f)
+        {
+            ChangeState(AIState.Dead);
+        }
     }
 }
