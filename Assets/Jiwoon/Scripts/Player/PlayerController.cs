@@ -1,37 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Animations;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
-
+using System.Collections;
 public class PlayerController : MonoBehaviour
 {
+    public PlayerCondition condition;
+    public float staminaRecoveryDelay = 10f;
+    public float rollDuration = 1f;
+
     [Header("Attack")]
-    public float damage;
-    public BoxCollider meleeArea;
-    public TrailRenderer trailEffect;
-    public float force;
+    [SerializeField] private float damage;
+    [SerializeField] private BoxCollider meleeArea;
+    [SerializeField] private TrailRenderer trailEffect;
+    [SerializeField] private float force;
+    [SerializeField] private float UseSpecialAttackStamina;
 
     [Header("Animation")]
-    public Animator anim;
+    [SerializeField] private Animator anim;
+
+    [Header("Roll")]
+    [SerializeField] private BoxCollider playerBody;
 
     [Header("Movement")]
-    public float moveSpeed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpPower;
+    [SerializeField] private float sprintMultiplier = 2f;
+    [SerializeField] private float groundCheckDistance = 0.1f;
     private float moveSpeedRestorer;
-    public float jumppower;
     private Vector2 curMovementInput;
 
     [Header("Look")]
-    public Transform cameraContainer;
-    public float minXlook;
-    public float maxXlook;
+    [SerializeField] private Transform cameraContainer;
+    [SerializeField] private float minXlook;
+    [SerializeField] private float maxXlook;
+    [SerializeField] private float lookSensitivity;
+    [SerializeField] private LayerMask groundLayerMask;
     private float camCurXRot;
-    public float lookSensitivity;
     private Vector2 mouseDelta;
-    public LayerMask groundLayerMask;
 
     private Rigidbody _rb;
+    private Vector2 _movementInput;
+    public bool _isSprinting = false;
+    public bool _isGrounded = true;
+    private bool _isAttacking = false;
+
+    private bool isPause = false;
 
     private void Awake()
     {
@@ -42,46 +54,110 @@ public class PlayerController : MonoBehaviour
     {
         moveSpeedRestorer = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
+
+        condition = CharacterManager.Instance.Player.condition;
+
+        GameManager.Instance.onGamePause += PausePlayer;
+        GameManager.Instance.onGameStart += PlayPlayer;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.onGamePause -= PausePlayer;
+        GameManager.Instance.onGameStart -= PlayPlayer;
     }
     private void FixedUpdate()
     {
-        Move();
+        if (!isPause)
+        {
+            Move();
+        }
     }
 
     private void Update()
     {
+        _isGrounded = IsGrounded();
 
+        if (_isGrounded && _movementInput.magnitude > 0)
+        {
+            if (_isSprinting)
+            {
+                anim.SetBool("IsRunning", true);
+                if(condition.uiconditions.stamina.curValue <= 1f)
+                {
+                    condition.uiconditions.health.Substract(10f * Time.deltaTime);
+                }
+                condition.uiconditions.stamina.Substract(3f * Time.deltaTime);
+            }
+            else
+            {
+                anim.SetBool("IsWalking", true);
+            }
+        }
+        else
+        {
+            anim.SetBool("IsWalking", false);
+            anim.SetBool("IsRunning", false);
+        }
     }
 
     private void LateUpdate()
     {
-        if (Time.timeScale > 0f)
+        if (!isPause)
         {
             CameraLook();
         }
-    }
 
+    }
+  
     private void Move()
     {
-        Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
-        dir *= moveSpeed;
-        dir.y = _rb.velocity.y;
+        Vector3 moveDirection = transform.forward * _movementInput.y + transform.right * _movementInput.x;
+        moveDirection *= _isSprinting ? moveSpeed * sprintMultiplier : moveSpeed;
+        moveDirection.y = _rb.velocity.y;
 
-        _rb.velocity = dir;
+        _rb.velocity = moveDirection;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
+        _movementInput = context.ReadValue<Vector2>();
+
+        if (_movementInput != Vector2.zero)
         {
-            curMovementInput = context.ReadValue<Vector2>();
-            anim.SetBool("IsMove", true);
-            
+            if (Keyboard.current.leftShiftKey.isPressed)
+            {
+                _isSprinting = true;
+                anim.SetBool("IsRunning", true);
+                anim.SetBool("IsWalking", false);
+            }
+            else
+            {
+                _isSprinting = false;
+                anim.SetBool("IsRunning", false);
+                anim.SetBool("IsWalking", true);
+            }
+        }
+        else
+        {
+            _isSprinting = false;
+            anim.SetBool("IsRunning", false);
+            anim.SetBool("IsWalking", false);
+        }
+    }
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            _isSprinting = true;
+            anim.SetBool("IsRunning", true);
+            anim.SetBool("IsWalking", false);
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            curMovementInput = Vector2.zero;
-            anim.SetBool("IsMove", false);
+            _isSprinting = false;
+            anim.SetBool("IsRunning", false);
+            anim.SetBool("IsWalking", true);
         }
     }
 
@@ -102,11 +178,20 @@ public class PlayerController : MonoBehaviour
         mouseDelta = context.ReadValue<Vector2>();
     }
 
-    public void Onjump(InputAction.CallbackContext context)
+    public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && IsGrounded())
+        if (context.phase == InputActionPhase.Started && _isGrounded)
         {
-            _rb.AddForce(Vector2.up * jumppower, ForceMode.Impulse);
+            _rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
+            _isGrounded = false;
+        }
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            UIManager.Instance.ShowInventory();
         }
     }
 
@@ -122,7 +207,7 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 0.5f, groundLayerMask))
+            if (Physics.Raycast(rays[i], 1f, groundLayerMask))
             {
                 return true;
             }
@@ -132,32 +217,141 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started)
+        if (!_isAttacking && context.phase == InputActionPhase.Performed)
         {
-            anim.SetBool("IsAttack", true);
-            StopCoroutine("Swing");
-            StartCoroutine("Swing");
+            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue > UseSpecialAttackStamina)
+            {
+                StopCoroutine(SpecialAttackCoroutine());
+                StartCoroutine(SpecialAttackCoroutine());
+                condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
+                
+            }
+            else
+            {
+                StartCoroutine(AttackCoroutine());
+            }
         }
-        else if (context.phase == InputActionPhase.Performed)
+    }
+    public void OnRoll(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
         {
-            anim.SetBool("IsAttack", false);
+            StartCoroutine(Rolling());
+            condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
         }
+    }
+    IEnumerator Rolling()
+    {
+        float originalMoveSpeed = moveSpeed;
+
+        Vector3 originalPosition = transform.position;
+        Vector3 targetPosition = originalPosition + transform.forward * 3f; // 이동 거리 조절 가능
+
+        float duration = 0.3f;
+        float elapsedTime = 0f;
+
+        Vector3 startPosition = originalPosition;
+
+        anim.SetBool("IsRoll", true);
+
+        while (elapsedTime < duration)
+        {
+
+            float distanceCovered = (elapsedTime / duration) * Vector3.Distance(startPosition, targetPosition);
+            transform.position = startPosition + transform.forward * distanceCovered;
+
+
+            playerBody.transform.position = transform.position;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        anim.SetBool("IsRoll", false);
+
+        transform.position = targetPosition;
+
+        playerBody.transform.position = transform.position;
+
+        moveSpeed = moveSpeedRestorer;
     }
     IEnumerator Swing()
     {
         moveSpeed = 0f;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f); // 칼을 든다.
         meleeArea.enabled = true;
         trailEffect.enabled = true;
-        yield return new WaitForSeconds(0.3f);
-        _rb.AddForce(transform.forward * 10f * Time.timeScale, ForceMode.VelocityChange );
-        meleeArea.enabled = false;
 
-        yield return new WaitForSeconds(0.3f);
+        Vector3 originalPosition = transform.position;
+        Vector3 targetPosition = originalPosition + transform.forward * 0.5f; // 약간 앞으로간다.
+        float elapsedTime = 0f;
+        float duration = 0.3f; // 내려칠 때의 시간
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        meleeArea.enabled = false;
+        _isAttacking = false;
+
+        yield return new WaitForSeconds(0.3f); // 다시든다.
         trailEffect.enabled = false;
 
-        yield return new WaitForSeconds(0.1f);
         moveSpeed = moveSpeedRestorer;
+    }
+
+    IEnumerator Swing2()
+    {
+        moveSpeed = 0f;
+        yield return new WaitForSeconds(0.06f); // 칼을 든다.
+        meleeArea.enabled = true;
+        trailEffect.enabled = true;
+
+        Vector3 originalPosition = transform.position;
+        Vector3 targetPosition = originalPosition + transform.forward * 1f; //약간 앞으로(일반공격보다 조금더)간다.
+        float elapsedTime = 0f;
+        float duration = 0.44f; // 내려칠 때의 시간
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        _isAttacking = false;
+
+        yield return new WaitForSeconds(0.3f); //다시든다.
+        meleeArea.enabled = false;
+        trailEffect.enabled = false;
+
+        moveSpeed = moveSpeedRestorer;
+    }
+
+    IEnumerator AttackCoroutine()
+    {
+        _isAttacking = true;
+        anim.SetBool("IsAttack", true);
+        StopCoroutine("Swing");
+        StartCoroutine("Swing");
+
+        yield return new WaitForSeconds(0f);
+
+        anim.SetBool("IsAttack", false);
+    }
+
+    IEnumerator SpecialAttackCoroutine()
+    {
+        _isAttacking = true;
+        anim.SetBool("IsSpecialAttack", true);
+        StopCoroutine("Swing2");
+        StartCoroutine("Swing2");
+
+        yield return new WaitForSeconds(0f);
+        anim.SetBool("IsSpecialAttack", false);
     }
 
     public void OnPickUp(InputAction.CallbackContext context)
@@ -165,10 +359,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public void OnOpenInventory(InputAction.CallbackContext context)
-    {
-
-    }
 
     public void OnOpenOptions(InputAction.CallbackContext context)
     {
@@ -191,6 +381,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void PausePlayer()
+    {
+        isPause = true;
+        anim.SetBool("IsMove", false);
+        anim.SetBool("IsRun", false);
+        _rb.velocity = Vector3.zero;
+    }
 
+    private void PlayPlayer() => isPause = false;
 
 }

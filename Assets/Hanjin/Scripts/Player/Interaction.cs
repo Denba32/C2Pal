@@ -14,7 +14,7 @@ public class Interaction : MonoBehaviour
     public float maxCheckDistance;
     public LayerMask layerMask;
 
-    private Collider[] detectedObject;
+    public Collider[] detectedObject;
 
     public GameObject curInteractGameObject;
     private IInteractable curInteractable;
@@ -27,16 +27,41 @@ public class Interaction : MonoBehaviour
     public GameObject useIcon;
     public GameObject talkIcon;
 
+    private bool isPause = false;
+
+    private void OnEnable()
+    {
+        GameManager.Instance.onGamePause += OnPause;
+        GameManager.Instance.onGameStart += OnStart;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.onGamePause -= OnPause;
+        GameManager.Instance.onGameStart -= OnStart;
+    }
+
     private void Update()
     {
-        if(Time.time - lastCheckTime > checkRate)
+        if(!isPause)
         {
-            lastCheckTime = Time.time;
+            if (Time.time - lastCheckTime > checkRate)
+            {
+                lastCheckTime = Time.time;
 
-            DetectObject();
+                DetectObject();
+            }
         }
-    
+
+
     }
+
+    private void OnPause()
+    {
+        isPause = true;
+        detectedObject = null;
+    }
+    private void OnStart() => isPause = false;
 
     private void DetectObject()
     {
@@ -50,10 +75,10 @@ public class Interaction : MonoBehaviour
                 curInteractable = interactable;
                 SetPromptText(true);
             }
-
         }
         else
         {
+            detectedObject = null;
             curInteractGameObject = null;
             curInteractable = null;
             SetPromptText(false);

@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentItemData : MonoBehaviour
+public class EquipmentItemData : ItemData
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Define.EquipmentType equipmentType;
+    public int requireLevel;
+    public GameObject equipPrefab;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Equip Offset")]
+    public Vector3 posOffset;
+    public Vector3 rotOffset;
 }

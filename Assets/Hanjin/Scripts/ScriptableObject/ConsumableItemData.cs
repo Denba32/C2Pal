@@ -3,24 +3,16 @@
 using System;
 using UnityEngine;
 
-public enum ConsumableType
-{
-    Health,
-    Mana,
-    Stamina,
-    Hunger,
-}
-
 [Serializable]
 public class ItemDataConsumable
 {
-    public ConsumableType type;
+    public Define.ConsumableValueType type;
     public float value;
 }
 
 public class ConsumableItemData : ItemData
 {
-    [Header("Stacking")]
-    public bool canStack;
-    public int maxAmount;
+    [Header("Consumable")]
+
+    public Define.ConsumableItemType consumableItemType;
 }

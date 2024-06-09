@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +6,11 @@ using UnityEngine;
 public class PlayerCondition : MonoBehaviour
 {
     public UIConditions uiconditions;
+    
 
     Condition health { get { return uiconditions.health; } }
     Condition hunger { get { return uiconditions.hunger; } }
     Condition stamina { get { return uiconditions.stamina; } }
-
-
 
     public float noHungerHealthDecay;
     void Update()
@@ -30,8 +29,29 @@ public class PlayerCondition : MonoBehaviour
         }
     }
 
+    public void RestoreStamina(float amount)
+    {
+        stamina.Add(amount);
+    }
+    public bool Heal(float amount)
+    {
+        if (health.curValue + amount > health.maxValue)
+        {
+            Debug.Log("HPï¿½ï¿½ ï¿½Ì¹ï¿½ Max ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.");
+            return false;
+        }
+
+        health.Add(amount);
+        return true;
+    }
+
+    public void Eat(float amount)
+    {
+        hunger.Add(amount);
+    }
+
     private void Die()
     {
-        Debug.Log("´ç½ÅÀº Á×¾ú½À´Ï´Ù!");
+        Debug.Log("ë‹¹ì‹ ì€ ì£½ì—ˆìŠµë‹ˆë‹¤!");
     }
 }

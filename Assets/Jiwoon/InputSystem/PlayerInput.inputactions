@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PickUp",
+                    "name": "Roll",
                     "type": "Button",
                     "id": "0c80ff61-fc5c-47a7-a6ab-a0670a79675c",
                     "expectedControlType": "Button",
@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "OpenInventory",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "9d63498c-be0e-4a17-86e5-586d7b8dfc81",
                     "expectedControlType": "Button",
@@ -63,6 +63,24 @@
                     "name": "OpenOptions",
                     "type": "Button",
                     "id": "660b8123-56e1-429e-9dff-b0d6b60341ac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Value",
+                    "id": "906d2c39-ea0b-432d-9a11-038044aab28f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Inventroy",
+                    "type": "Button",
+                    "id": "6010591e-709a-44ee-af7f-343f09083aa4",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -165,7 +183,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PickUp",
+                    "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -176,7 +194,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "OpenInventory",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -188,6 +206,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenOptions",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28d96ce1-4590-452c-bc80-6bf77ab24e56",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1b776bb-4de0-4fab-9ab2-9042193b6947",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventroy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

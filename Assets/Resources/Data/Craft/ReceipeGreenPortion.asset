@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b275e85848ede1b469b9a0eeb77ac0ad, type: 3}
+  m_Name: ReceipeGreenPortion
+  m_EditorClassIdentifier: 
+  id: 6
+  receipeName: "\uCD08\uB85D \uD3EC\uC158"
+  craftTarget: {fileID: 11400000, guid: db9ee09554bb8ec4eada437d1ffd689b, type: 2}
+  craftQuantity: 1
+  needs:
+  - needItem: {fileID: 11400000, guid: 4380b4ce5c62dc34ca7bd4f0013b0aa6, type: 2}
+    neadedQuantity: 2
+  - needItem: {fileID: 11400000, guid: 9d744f90323c47849b6b592d36441a88, type: 2}
+    neadedQuantity: 1
