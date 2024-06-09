@@ -7,6 +7,13 @@ public interface IDamagable
 }
 public class Define
 {
+    public enum SceneType
+    {
+        None,
+        Start,
+        Main,
+
+    }
     public enum EquipmentType
     {
         PrimaryWeapon,

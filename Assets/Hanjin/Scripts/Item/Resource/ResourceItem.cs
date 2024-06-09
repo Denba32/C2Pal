@@ -10,9 +10,6 @@ public class ResourceItem : ItemObject
         set => base.data = value;
     }
 
-    public AudioSource aSource;
-
-
     public override string GetInteractPrompt()
     {
         if (data == null)
@@ -30,21 +27,11 @@ public class ResourceItem : ItemObject
         base.OnInteract();
 
         Debug.Log($"{data.displayName} 자원 줍기");
-        CharacterManager.Instance.Player.itemData = data;
-        CharacterManager.Instance.Player.onAddItem?.Invoke();
-
+        CharacterManager.Instance.Player.ITData = data;
+        CharacterManager.Instance.Player.onAddItem.Invoke(data);
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision != null)
-        {
-            if (collision.gameObject.CompareTag("Level"))
-            {
-                aSource.PlayOneShot(data.dropSound, 0.5f);
-            }
-        }
-    }
+
     public override InteractableType GetInteractableType() => InteractableType.Pickup;
 }

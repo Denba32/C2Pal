@@ -13,12 +13,11 @@ public class PortionItem : ConsumableItem
     {
         base.OnInteract();
 
-        Debug.Log($"{data.displayName} 포션 줍기");
-        CharacterManager.Instance.Player.itemData = data;
-        CharacterManager.Instance.Player.onAddItem?.Invoke();
+        Debug.Log($"{data.displayName} 소모품 줍기");
+        CharacterManager.Instance.Player.ITData = data;
+        CharacterManager.Instance.Player.onAddItem.Invoke(data);
 
         Destroy(gameObject);
     }
-
 
 }

@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0f7b696a3ee9247ab7d4bf395636ca, type: 3}
   m_Name: RabbitSO
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  health: 0
   walkSpeed: 1
   runSpeed: 8
+  dropOnDeath:
+  - {fileID: 4722454393968942401, guid: 65b3b3ca01332fb4a9eee3f347f1686a, type: 3}
+  detectDistance: 5
   minWanderWaitTime: 2
   maxWanderWaitTime: 5
-  detectDistance: 5
   safeDistance: 8

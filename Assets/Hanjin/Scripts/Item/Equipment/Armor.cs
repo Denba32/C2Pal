@@ -19,14 +19,14 @@ public class Armor : EquipItem
         base.UnEquip();
     }
 
-    public override void OnInteract()
-    {
-        base.OnInteract();
+    //public override void OnInteract()
+    //{
+    //    base.OnInteract();
 
-        Debug.Log($"{data.displayName} 방어구 줍기");
-        CharacterManager.Instance.Player.itemData = data;
-        CharacterManager.Instance.Player.onAddItem?.Invoke();
+    //    Debug.Log($"{data.displayName} 방어구 줍기");
+    //    CharacterManager.Instance.Player.ITData = data;
+    //    CharacterManager.Instance.Player.onAddItem?.Invoke();
 
-        Destroy(gameObject);
-    }
+    //    Destroy(gameObject);
+    //}
 }

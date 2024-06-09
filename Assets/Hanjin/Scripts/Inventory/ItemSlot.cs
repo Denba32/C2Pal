@@ -6,13 +6,17 @@ using UnityEngine.EventSystems;
 public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public RectTransform buttonRect;
+
     public UIDescription description;
 
     public ItemData item;
 
     public Button button;
+
     public Image icon;
+
     public TMP_Text quantityText;
+
     public Outline outline;
 
     public UIInventory inventory;

@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Pool;
+using static UnityEngine.GraphicsBuffer;
 
 public class BossNPC : MonoBehaviour
 {
@@ -18,21 +21,34 @@ public class BossNPC : MonoBehaviour
     private float playerDistance;
     private float dashDistance = 15f;
     private float rangedattackDistance = 30f;
+
+    // 패턴 전용
     private BattlePattern pattern;
 
     // 대쉬를 위한 것
-    private float dashCoolTime;
     public bool DashDamagedActive;
     public bool DontSetPlayerDestination;
+    private float currentDashCooltime;
 
     // 원거리 공격을 위한 것   
     [Header("RangedAttack Settings")]
-    public float rangedattackCooltime;
-    public GameObject blackOrb;
     public Transform rangedattackTransform;
+    private float currentRangedattackCooltime;
+
+    // 페이즈 2를 위한 것
+    [Header("Phase2Enter Skill")]
+    public Vector3 usePosition;
+    public Vector3 spawnShadowPosition;
+    public float maxSideDistance;
+    public bool isTrueXFalseZ;
+    private IObjectPool<BossShadow> _Pool;
+
+    // 이건 animator 접근용
+    public bool activateSpawnShadow;
 
     // 상태
     AIState aiState;
+    private float currentmagnification = 1f;
 
     // 공격패턴
     public enum BattlePattern
@@ -44,30 +60,35 @@ public class BossNPC : MonoBehaviour
         Rush = 10 // 2페이즈 진입기
     }
 
-    // 페이즈2
-    bool isPhase2 = false;
+    // 공격 후 대기 시간
+    private float attackDelay;
 
     // SO
-    public EnemySO statSO;
-
-    // 공격에 필요한 것
-    private float attackDelay;
+    public BossSO statSO;
     
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        _Pool = new ObjectPool<BossShadow>(CreateShadow, OnGetShadow, OnReleaseShadow, OnDestroyShadow, maxSize:statSO._maxSize);
     }
 
     void Start()
     {
         scracthCollider.enabled = false; // 부모의 OnCollisionEnter는 자식 Collider에도 영향을 받을 수 있다..
         ChangeState(AIState.Idle);
+        Invoke("Enter2Phase", 10f); // 원래조건 체력이 반 이상 떨어졌을 때 발동시킬 것
+
+        // 돌진기 같은 거 케어
+        NavMeshPath path = new NavMeshPath();
+        if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
+            agent.SetDestination(CharacterManager.Instance.Player.transform.position);
     }
 
     void Update()
     {
-        if (aiState == AIState.Dead) { return; }
+        // 추후에 정지가 있으면 넣어줄 것
+        if (aiState == AIState.Dead || aiState == AIState.Busy) { return; }
         // 플레이어 감지
         if (CharacterManager.Instance.Player != null)
         {
@@ -84,7 +105,11 @@ public class BossNPC : MonoBehaviour
             case AIState.Attack:
                 AttackingState();
                 break;
+            default:
+                break;
         }
+
+        animator.speed = currentmagnification;
     }
 
     // 상태 변환
@@ -109,7 +134,9 @@ public class BossNPC : MonoBehaviour
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
                 // 추후에 시체 통과시킬 방법을 찾을 것... (아니면 모든 Trigger를 꺼놓는 게 좋음.)
-                Invoke("Destroy", 30f);
+                StartCoroutine(DestroyMess());
+                break;
+            default:
                 break;
         }
     }
@@ -117,18 +144,21 @@ public class BossNPC : MonoBehaviour
     public void ChangePattern(BattlePattern _pattern)
     {
         pattern = _pattern;
+
+        switch(pattern)
+        {
+            case BattlePattern.Rush:
+                animator.SetBool("Run", true);
+                agent.isStopped = false;
+                agent.speed = statSO.runSpeed;
+                break;
+            default:
+                break;
+        }
     }
 
     private void AttackingState()
     {
-        // 플레이어랑 가깝다면, walk
-        // 플레이어랑 좀 멀다면, run
-
-        // 각각의 공격을 시전한 후에는 IdleState 상태로 전환할 것. (쿨타임이 필요할 것임)
-        // 근거리에서는 scracth (attack1 클립)
-        // 근거리에서 벗어난다 싶으면 돌진 (attack2 클립)
-        // 원거리일 때는 한번 발사체 발사 (attack3 클립)
-
         // 2페이즈로 넘어갈 경우에는 따로 메서드를 호출할 것
 
         if (attackDelay > 0)
@@ -136,29 +166,29 @@ public class BossNPC : MonoBehaviour
             attackDelay -= Time.deltaTime;
             if (attackDelay <= 0) { attackDelay = 0; }
         }
-        if (dashCoolTime > 0)
+        if (currentDashCooltime > 0)
         {
-            dashCoolTime -= Time.deltaTime;
-            if (dashCoolTime <= 0) { dashCoolTime = 0; }
+            currentDashCooltime -= Time.deltaTime;
+            if (currentDashCooltime <= 0) { currentDashCooltime = 0; }
         }
-        if (rangedattackCooltime > 0)
+        if (currentRangedattackCooltime > 0)
         {
-            rangedattackCooltime -= Time.deltaTime;
-            if (rangedattackCooltime <=0) { rangedattackCooltime = 0; }
+            currentRangedattackCooltime -= Time.deltaTime;
+            if (currentRangedattackCooltime <= 0) { currentRangedattackCooltime = 0; }
         }
 
         // 돌진기
-        if (dashCoolTime <= 0 && playerDistance > statSO.attackDistance * statSO.attackDistance && playerDistance < dashDistance * dashDistance && IsPlayerInDashDirection())
+        if (currentDashCooltime <= 0 && playerDistance > statSO.attackDistance * statSO.attackDistance && playerDistance < dashDistance * dashDistance && IsPlayerInDashDirection())
         {
-            animator.SetBool("Run", false); // 공격거리 내부
+                animator.SetBool("Run", false); // 공격거리 내부
             if (attackDelay <= 0)
             {
                 animator.SetTrigger("Dash");
                 agent.SetDestination(agent.destination * 1.5f); // 좀 더 멀리 뛰어주는 게 좋을 지도..
                 DontSetPlayerDestination = true;
                 DashDamagedActive = true;
-                attackDelay = 5f;
-                //dashCoolTime = 20f;
+                attackDelay = statSO.attackRate;
+                currentDashCooltime = statSO.dashCoolTime - (statSO.attackRate * (currentmagnification - 1));
             }
         }
         // 할퀴기
@@ -171,19 +201,19 @@ public class BossNPC : MonoBehaviour
                 ChangePattern(BattlePattern.Scratch);
                 //CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
                 animator.SetTrigger("Scracth");
-                attackDelay = 5f;
+                attackDelay = statSO.attackRate  - (statSO.attackRate * (currentmagnification - 1));
             }
         }
         // 원거리 공격
-        else if (rangedattackCooltime <= 0 && playerDistance > dashDistance * dashDistance && playerDistance < rangedattackDistance * rangedattackDistance && IsPlayerInFieldOfView())
+        else if (currentRangedattackCooltime <= 0 && playerDistance > dashDistance * dashDistance && playerDistance < rangedattackDistance * rangedattackDistance && IsPlayerInFieldOfView())
         {
             animator.SetBool("Run", false);
             if (attackDelay <= 0)
             {
                 ChangePattern(BattlePattern.RangedAttack);
                 animator.SetTrigger("RangedAttack");
-                attackDelay = 3f;
-                rangedattackCooltime = 15f;
+                attackDelay = statSO.attackRate - 2f - (statSO.attackRate * (currentmagnification - 1));
+                currentRangedattackCooltime = statSO.rangedattackCooltime;
             }
         }
         else
@@ -219,19 +249,86 @@ public class BossNPC : MonoBehaviour
     // 원거리 공격을 위한 검은 구체 생성
     public void InstantiateBlackOrb()
     {
-        Instantiate(blackOrb, rangedattackTransform.position, Quaternion.identity);
+        Instantiate(statSO.blackOrb, rangedattackTransform.position, Quaternion.identity);
     }
 
     private void Enter2Phase() // 가능하다면 코루틴을 활용할 생각임...
     {
-        // 방 중앙에 적절히 서서 해당 방향으로 그림자들을 소환해서 통과시킴
-        // 각 그림자에게는 isTrigger로 부여해줄 것 (부딪혀서 밀어내는 역할은 전혀 아니니 주의할 것)
-        // 당연히 위치의 편의상을 위해서 자식으로 둬서 localposition을 바꿔줄 것
+        // 일단 첫번째 문제로는 모두 잠궈놓아야함.. 스폰이 끝나면 원래 상태로 돌아가고
+        ChangePattern(BattlePattern.Rush);
+        ChangeState(AIState.Busy);
 
-        // 해당 행동이 끝나고 나면 2Phase로 돌입
+        StartCoroutine(ReadyToRush());
+    }
+
+
+
+    IEnumerator ReadyToRush()
+    {
+        agent.SetDestination(usePosition + Vector3.back * 2);
+        yield return new WaitUntil(() => agent.remainingDistance < 0.1f); // 이 단계에서 지멋대로 풀림;
+
+        agent.SetDestination(transform.position + Vector3.forward * 2);
+
+        yield return new WaitUntil(() => agent.remainingDistance < 0.05f);
+
+        animator.SetBool("Run", false);
+        agent.isStopped = true;
+
+        animator.SetTrigger("Phase2EnterTrigger");
+        yield return new WaitUntil(() => activateSpawnShadow);
+        StartCoroutine(SpawnShadow());
+    }
+
+    IEnumerator SpawnShadow()
+    {
+        int i = 0;
+        while(i < statSO.spawnAmount)
+        {
+            yield return new WaitForSeconds(statSO.spawnDuration);
+            _Pool.Get();
+            i++;
+        }
+        // 돌진기 케어
+        NavMeshPath path = new NavMeshPath();
+        if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
+            agent.SetDestination(CharacterManager.Instance.Player.transform.position);
+
+        // 끝나고 나서
+        ChangePattern(BattlePattern.None);
+        ChangeState(AIState.Attack);
+        animator.SetBool("Run", true);
+        activateSpawnShadow = false;
+
+        currentmagnification = statSO.Phase2Magnification;
     }
 
     // 추후에 IDamagable을 넣는다면 거기에 피가 반 깎였을 시 2페이즈 실행을 넣을 것
+
+        // Shadow 오브젝트 풀 전용
+    private BossShadow CreateShadow()
+    {
+        BossShadow bossShadow = Instantiate(statSO._ShadowPrefab).GetComponent<BossShadow>();
+        bossShadow.InitObject(spawnShadowPosition, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed);
+        bossShadow.SetManagedPool(_Pool);
+        return bossShadow;
+    }
+
+    private void OnGetShadow(BossShadow bossShadow)
+    {
+        bossShadow.gameObject.SetActive(true);
+    }
+
+    private void OnReleaseShadow(BossShadow bossShadow)
+    {
+        bossShadow.gameObject.SetActive(false);
+    }
+
+    private void OnDestroyShadow(BossShadow bossShadow)
+    {
+        Destroy(bossShadow.gameObject);
+    }
+
 
     // 시야 확인
     private bool IsPlayerInFieldOfView()
@@ -241,6 +338,7 @@ public class BossNPC : MonoBehaviour
         return angle < statSO.fieldOfView * 0.5f;
     }
 
+        // 시야확인 (돌진용)
     private bool IsPlayerInDashDirection()
     {
         Vector3 directionToPlayer = CharacterManager.Instance.Player.transform.position - transform.position;
@@ -249,8 +347,9 @@ public class BossNPC : MonoBehaviour
     }
 
     // 스테이지가 넘어간다면 호출할 것
-    private void Destroy()
+    protected virtual IEnumerator DestroyMess()
     {
+        yield return new WaitForSeconds(15f);
         Destroy(this.gameObject);
     }
 }
