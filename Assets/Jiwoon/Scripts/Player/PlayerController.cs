@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using Unity.VisualScripting;
+using System.Net;
+using System;
 public class PlayerController : MonoBehaviour
 {
     public PlayerCondition condition;
@@ -44,6 +47,7 @@ public class PlayerController : MonoBehaviour
     private bool _isAttacking = false;
 
     private bool isPause = false;
+    private bool staminaRecover = false;
 
     private void Awake()
     {
@@ -82,12 +86,14 @@ public class PlayerController : MonoBehaviour
         {
             if (_isSprinting)
             {
-                anim.SetBool("IsRunning", true);
-                if(condition.uiconditions.stamina.curValue <= 1f)
-                {
-                    condition.uiconditions.health.Substract(10f * Time.deltaTime);
-                }
                 condition.uiconditions.stamina.Substract(3f * Time.deltaTime);
+                anim.SetBool("IsRunning", true);
+                if (condition.uiconditions.stamina.curValue == 0f)
+                {
+                    StopCoroutine(ZeroStaminaSlower());
+                    StartCoroutine(ZeroStaminaSlower());
+                    
+                }
             }
             else
             {
@@ -100,6 +106,8 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsRunning", false);
         }
     }
+
+   
 
     private void LateUpdate()
     {
@@ -149,9 +157,11 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            
             _isSprinting = true;
             anim.SetBool("IsRunning", true);
             anim.SetBool("IsWalking", false);
+            
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
@@ -160,7 +170,6 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsWalking", true);
         }
     }
-
 
     void CameraLook()
     {
@@ -219,7 +228,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isAttacking && context.phase == InputActionPhase.Performed)
         {
-            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue > UseSpecialAttackStamina)
+            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
             {
                 StopCoroutine(SpecialAttackCoroutine());
                 StartCoroutine(SpecialAttackCoroutine());
@@ -234,7 +243,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnRoll(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
         {
             StartCoroutine(Rolling());
             condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
@@ -303,7 +312,7 @@ public class PlayerController : MonoBehaviour
         moveSpeed = moveSpeedRestorer;
     }
 
-    IEnumerator Swing2()
+    IEnumerator DoubleSwing()
     {
         moveSpeed = 0f;
         yield return new WaitForSeconds(0.06f); // 칼을 든다.
@@ -347,8 +356,8 @@ public class PlayerController : MonoBehaviour
     {
         _isAttacking = true;
         anim.SetBool("IsSpecialAttack", true);
-        StopCoroutine("Swing2");
-        StartCoroutine("Swing2");
+        StopCoroutine("DoubleSwing");
+        StartCoroutine("DoubleSwing");
 
         yield return new WaitForSeconds(0f);
         anim.SetBool("IsSpecialAttack", false);
@@ -387,6 +396,17 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("IsMove", false);
         anim.SetBool("IsRun", false);
         _rb.velocity = Vector3.zero;
+    }
+
+    IEnumerator ZeroStaminaSlower()
+    {
+        Debug.Log("당신은 스테미나를 너무 많이 써서 느려졌습니다.");
+        moveSpeed = 3f;
+        sprintMultiplier = 1f;
+        yield return new WaitForSeconds(10f);
+        Debug.Log("당신은 속도를 회복했습니다.");
+        sprintMultiplier = 2f;
+        moveSpeed = moveSpeedRestorer;
     }
 
     private void PlayPlayer() => isPause = false;
