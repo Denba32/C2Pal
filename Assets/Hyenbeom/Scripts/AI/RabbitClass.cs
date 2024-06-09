@@ -70,8 +70,8 @@ public class RabbitClass : NPC
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
                 _collider.isTrigger = true; // 통과 시키게 하기 위해서
-                DropItem();
                 StartCoroutine(DestroyMess());
+                DropItem(); // 드랍 아이템
                 break;
         }
     }
@@ -111,7 +111,7 @@ public class RabbitClass : NPC
         }
         if (collision.gameObject == home)
         {
-            if (isWantHome == true)
+            if (isWantHome == true && aiState != AIState.Dead)
             {
                 home.GetComponent<RabbitHole>().RabbitGoHome(this.gameObject);
             }

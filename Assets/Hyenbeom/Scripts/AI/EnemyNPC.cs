@@ -24,6 +24,9 @@ public class EnemyNPC : MonoBehaviour
     // 공격에 필요한 것
     private float lastAttackTime;
 
+    // 스폰지점에서 소환됐다면 내 스폰 지점
+    private GameObject spawnPoint;
+
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -171,6 +174,10 @@ public class EnemyNPC : MonoBehaviour
     protected virtual IEnumerator DestroyMess()
     {
         yield return new WaitForSeconds(15f);
+        if (spawnPoint != null)
+        {
+            spawnPoint.GetComponent<MonsterSpawnPoint>().MonsterDead(this.gameObject);
+        }
         Destroy(this.gameObject);
     }
 }
