@@ -22,8 +22,8 @@ MonoBehaviour:
   price: 500
   canStack: 0
   maxAmount: 0
-  dropSound: {fileID: 0}
-  equipmentType: 3
+  dropSound: {fileID: 8300000, guid: f131342be405ae14b9bf18460426786a, type: 3}
+  equipmentType: 0
   requireLevel: 1
   equipPrefab: {fileID: 2616583900745973212, guid: 9d38baf19cf8e6245bfb4239aca9376c, type: 3}
   posOffset: {x: 0, y: 0, z: 0}

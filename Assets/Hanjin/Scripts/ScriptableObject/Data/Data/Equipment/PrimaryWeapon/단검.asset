@@ -32,4 +32,4 @@ MonoBehaviour:
   attackDistance: 2
   useStamina: 1
   value: 5
-  resourceType: 2
+  resourceType: 0

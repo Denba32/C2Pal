@@ -22,7 +22,7 @@ MonoBehaviour:
   price: 100
   canStack: 0
   maxAmount: 0
-  dropSound: {fileID: 0}
+  dropSound: {fileID: 8300000, guid: f131342be405ae14b9bf18460426786a, type: 3}
   equipmentType: 3
   requireLevel: 1
   equipPrefab: {fileID: 8267941890367800412, guid: e8d0343beae868149b0ad11882a2d613, type: 3}
@@ -32,4 +32,4 @@ MonoBehaviour:
   attackDistance: 0
   useStamina: 0
   value: 3
-  resourceType: 0
+  resourceType: 2
