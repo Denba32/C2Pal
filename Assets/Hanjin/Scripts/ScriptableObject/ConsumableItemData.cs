@@ -15,7 +15,4 @@ public class ConsumableItemData : ItemData
     [Header("Consumable")]
 
     public Define.ConsumableItemType consumableItemType;
-
-    public bool canStack;
-    public int maxAmount;
 }

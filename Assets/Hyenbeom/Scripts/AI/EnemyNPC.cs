@@ -37,6 +37,7 @@ public class EnemyNPC : MonoBehaviour
 
     void Update()
     {
+        // 추후에 정지가 있으면 정지도 넣어줄 것
         if (aiState == AIState.Dead) { return; }
         // 플레이어 감지
         if (CharacterManager.Instance.Player != null)
@@ -90,7 +91,7 @@ public class EnemyNPC : MonoBehaviour
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
                 _collider.isTrigger = true; // 통과 시키게 하기 위해서
-                Invoke("Destroy", 30f);
+                StartCoroutine(DestroyMess());
                 break;
         }
     }
@@ -167,8 +168,9 @@ public class EnemyNPC : MonoBehaviour
         return angle < statSO.fieldOfView * 0.5f;
     }
 
-    private void Destroy()
+    protected virtual IEnumerator DestroyMess()
     {
+        yield return new WaitForSeconds(15f);
         Destroy(this.gameObject);
     }
 }

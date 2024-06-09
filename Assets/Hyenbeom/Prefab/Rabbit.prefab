@@ -301,6 +301,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statSO: {fileID: 11400000, guid: 6cd6b809424a46f4daeff615d4d60c9e, type: 2}
+  dropableLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1775999412985498928
 GameObject:
   m_ObjectHideFlags: 0

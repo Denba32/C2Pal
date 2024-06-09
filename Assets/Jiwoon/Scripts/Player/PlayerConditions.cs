@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerCondition : MonoBehaviour
 {
     public UIConditions uiconditions;
-    public PlayerCondition condition;
+    
 
     Condition health { get { return uiconditions.health; } }
     Condition hunger { get { return uiconditions.hunger; } }
@@ -27,6 +27,7 @@ public class PlayerCondition : MonoBehaviour
         {
             Die();
         }
+        
     }
     public bool Heal(float amount)
     {

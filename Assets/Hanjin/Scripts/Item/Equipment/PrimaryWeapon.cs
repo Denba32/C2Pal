@@ -16,9 +16,8 @@ public class PrimaryWeapon : EquipItem
         base.OnInteract();
 
         Debug.Log($"{data.displayName} 무기 줍기");
-        CharacterManager.Instance.Player.itemData = data;
-        CharacterManager.Instance.Player.onAddItem?.Invoke();
-
+        CharacterManager.Instance.Player.ITData = data;
+        CharacterManager.Instance.Player.onAddItem.Invoke(data);
         Destroy(gameObject);
     }
 

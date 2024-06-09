@@ -66,4 +66,11 @@ public class ActivatePattern : MonoBehaviour
         agent.isStopped = false;
         bossScript.ChangeState(AIState.Idle);
     }
+
+    // 2페이즈 진입
+
+    public void ActivatePhase2()
+    {
+        bossScript.activateSpawnShadow = true;
+    }
 }

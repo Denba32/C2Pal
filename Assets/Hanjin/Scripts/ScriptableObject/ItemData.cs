@@ -17,6 +17,11 @@ public abstract class ItemData : ScriptableObject
 
     public int price;
 
+    public bool canStack;
+    public int maxAmount;
+
+    public AudioClip dropSound;
+
     private void OnValidate()
     {
 #if UNITY_EDITOR
