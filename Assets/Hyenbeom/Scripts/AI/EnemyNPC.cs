@@ -141,7 +141,7 @@ public class EnemyNPC : MonoBehaviour, IDamagable
             if (Time.time - lastAttackTime > statSO.attackRate)
             {
                 lastAttackTime = Time.time;
-                //CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
+                CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().Damage(statSO.damage);
                 animator.speed = 1;
                 animator.SetTrigger("Attack");
             }

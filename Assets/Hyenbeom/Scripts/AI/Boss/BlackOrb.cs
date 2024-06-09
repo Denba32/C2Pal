@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BlackOrb : MonoBehaviour
 {
+    public BossSO statS0;
+
     void Start()
     {
         Invoke("DestroyObject", 15f);

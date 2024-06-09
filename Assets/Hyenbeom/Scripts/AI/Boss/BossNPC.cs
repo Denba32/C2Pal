@@ -205,8 +205,7 @@ public class BossNPC : MonoBehaviour, IDamagable
             if (attackDelay <= 0)
             {
                 ChangePattern(BattlePattern.Scratch);
-                //CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
-                animator.SetTrigger("Scracth");
+                animator.SetTrigger("Scratch");
                 attackDelay = statSO.attackRate  - (statSO.attackRate * (currentmagnification - 1));
             }
         }
@@ -247,7 +246,7 @@ public class BossNPC : MonoBehaviour, IDamagable
             if (pattern == BattlePattern.Dash && DashDamagedActive)
             {
                 DashDamagedActive = false;
-                Debug.Log("돌진기를 당했습니다.");
+                CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().Damage(statSO.damage);
             }
         }
     }
@@ -315,7 +314,7 @@ public class BossNPC : MonoBehaviour, IDamagable
     private BossShadow CreateShadow()
     {
         BossShadow bossShadow = Instantiate(statSO._ShadowPrefab).GetComponent<BossShadow>();
-        bossShadow.InitObject(spawnShadowPosition, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed);
+        bossShadow.InitObject(spawnShadowPosition, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed, statSO.damage);
         bossShadow.SetManagedPool(_Pool);
         return bossShadow;
     }
@@ -352,7 +351,7 @@ public class BossNPC : MonoBehaviour, IDamagable
         return angle < 20 * 0.5f;
     }
 
-    // 스테이지가 넘어간다면 호출할 것
+        // 파괴용
     protected virtual IEnumerator DestroyMess()
     {
         yield return new WaitForSeconds(90f);
