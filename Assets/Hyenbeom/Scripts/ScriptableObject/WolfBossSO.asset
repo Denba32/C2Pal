@@ -18,7 +18,7 @@ MonoBehaviour:
   runSpeed: 10
   dropOnDeath: []
   detectDistance: 10
-  damage: 5
+  damage: 10
   attackRate: 5
   attackDistance: 6
   fieldOfView: 60

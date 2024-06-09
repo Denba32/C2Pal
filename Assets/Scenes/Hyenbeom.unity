@@ -879,7 +879,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'goggle'\n\tTransform 'goggle'\n\tFrom animation
+    clip 'Idle_SwordShield'\n\tFrom animation clip 'Run_SwordShield'\n\tFrom animation
+    clip 'NormalAttack01_SwordShield'\n\tFrom animation clip 'NormalAttack02_SwordShield'\n\tFrom
+    animation clip 'Sprint_SwordShield'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -944,13 +949,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2823c1d2a2f285d4db038058522a6e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  condition: {fileID: 0}
+  staminaRecoveryDelay: 10
+  rollDuration: 1
   damage: 0
   meleeArea: {fileID: 0}
   trailEffect: {fileID: 0}
   force: 0
+  UseSpecialAttackStamina: 0
   anim: {fileID: 0}
+  playerBody: {fileID: 0}
   moveSpeed: 10
-  jumppower: 50
+  jumpPower: 0
+  sprintMultiplier: 2
+  groundCheckDistance: 0.1
   cameraContainer: {fileID: 1641759619}
   minXlook: 0
   maxXlook: 0
@@ -958,6 +970,8 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 55
+  _isSprinting: 0
+  _isGrounded: 1
 --- !u!114 &450828991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,7 +986,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   condition: {fileID: 0}
-  itemData: {fileID: 0}
+  inventory:
+    maxCapacity: 0
+    gold: 0
+    uiPrefab: {fileID: 0}
+  dropPosition: {fileID: 0}
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
+  ITData: {fileID: 0}
 --- !u!114 &450828992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1858,10 +1879,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: WolfBoss
       objectReference: {fileID: 0}
-    - target: {fileID: 7226319116902076475, guid: 5134d1aa55e1f3b4f8d8ca12d1b76b4e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2098,6 +2115,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MonsterSpawnPoint
       objectReference: {fileID: 0}
+    - target: {fileID: 7976317431307748183, guid: 1b7572af51d5fee46ac57e9021990e57, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9171128068195909883, guid: 1b7572af51d5fee46ac57e9021990e57, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.38553166
@@ -2294,7 +2315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5706939102546714944, guid: 76d389d54ae8b70499df98bc442a8ec6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7640946755175821068, guid: 76d389d54ae8b70499df98bc442a8ec6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2806,6 +2827,10 @@ PrefabInstance:
     - target: {fileID: 7976317431307748183, guid: 1b7572af51d5fee46ac57e9021990e57, type: 3}
       propertyPath: m_Name
       value: MonsterSpawnPoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7976317431307748183, guid: 1b7572af51d5fee46ac57e9021990e57, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9171128068195909883, guid: 1b7572af51d5fee46ac57e9021990e57, type: 3}
       propertyPath: m_LocalPosition.x

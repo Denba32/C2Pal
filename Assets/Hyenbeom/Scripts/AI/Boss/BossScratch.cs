@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class BossScratch : MonoBehaviour
 {
+
+    public BossSO statSO;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
-            Debug.Log("할퀴기를 당했습니다!");
+            CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
         }
     }
 

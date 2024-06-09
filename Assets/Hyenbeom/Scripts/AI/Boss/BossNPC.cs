@@ -6,7 +6,15 @@ using UnityEngine.AI;
 using UnityEngine.Pool;
 using static UnityEngine.GraphicsBuffer;
 
-public class BossNPC : MonoBehaviour
+public enum AngleState
+{
+    forward,
+    back,
+    left,
+    right
+}
+
+public class BossNPC : MonoBehaviour, IDamagable
 {
     // 필요한 컴포넌트
     [SerializeField] // 몇몇 애니메이션은 이곳을 통해서 받아와야함;; (사실상 SO로 건네받기 힘듬..)
@@ -42,6 +50,7 @@ public class BossNPC : MonoBehaviour
     public float maxSideDistance;
     public bool isTrueXFalseZ;
     private IObjectPool<BossShadow> _Pool;
+    public AngleState forwardAngle;
 
     // 이건 animator 접근용
     public bool activateSpawnShadow;
@@ -49,6 +58,9 @@ public class BossNPC : MonoBehaviour
     // 상태
     AIState aiState;
     private float currentmagnification = 1f;
+    private bool isPhaseTwo = false;
+    float currentHealth;
+    float maxHealth;
 
     // 공격패턴
     public enum BattlePattern
@@ -65,7 +77,6 @@ public class BossNPC : MonoBehaviour
 
     // SO
     public BossSO statSO;
-    
 
     void Awake()
     {
@@ -75,6 +86,8 @@ public class BossNPC : MonoBehaviour
 
     void Start()
     {
+        currentHealth = statSO.health;
+        maxHealth = statSO.health;
         scracthCollider.enabled = false; // 부모의 OnCollisionEnter는 자식 Collider에도 영향을 받을 수 있다..
         ChangeState(AIState.Idle);
         //Invoke("Enter2Phase", 10f); // 원래조건 체력이 반 이상 떨어졌을 때 발동시킬 것
@@ -200,8 +213,7 @@ public class BossNPC : MonoBehaviour
             if (attackDelay <= 0)
             {
                 ChangePattern(BattlePattern.Scratch);
-                //CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
-                animator.SetTrigger("Scracth");
+                animator.SetTrigger("Scratch");
                 attackDelay = statSO.attackRate  - (statSO.attackRate * (currentmagnification - 1));
             }
         }
@@ -242,7 +254,7 @@ public class BossNPC : MonoBehaviour
             if (pattern == BattlePattern.Dash && DashDamagedActive)
             {
                 DashDamagedActive = false;
-                Debug.Log("돌진기를 당했습니다.");
+                CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
             }
         }
     }
@@ -267,10 +279,23 @@ public class BossNPC : MonoBehaviour
     IEnumerator ReadyToRush()
     {
         agent.SetDestination(usePosition + Vector3.back * 2);
-        yield return new WaitUntil(() => agent.remainingDistance < 0.1f); // 이 단계에서 지멋대로 풀림;
+        yield return new WaitUntil(() => agent.remainingDistance < 0.1f);
 
-        agent.SetDestination(transform.position + Vector3.forward * 2);
-
+        switch (forwardAngle)   // 설정 반환 전환용
+        {
+            case AngleState.forward:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+            case AngleState.back:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+            case AngleState.left:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+            case AngleState.right:
+                agent.SetDestination(transform.position + Vector3.forward * 2);
+                break;
+        }
         yield return new WaitUntil(() => agent.remainingDistance < 0.05f);
 
         animator.SetBool("Run", false);
@@ -310,7 +335,7 @@ public class BossNPC : MonoBehaviour
     private BossShadow CreateShadow()
     {
         BossShadow bossShadow = Instantiate(statSO._ShadowPrefab).GetComponent<BossShadow>();
-        bossShadow.InitObject(spawnShadowPosition, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed);
+        bossShadow.InitObject(spawnShadowPosition, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed, statSO.damage);
         bossShadow.SetManagedPool(_Pool);
         return bossShadow;
     }
@@ -347,10 +372,27 @@ public class BossNPC : MonoBehaviour
         return angle < 20 * 0.5f;
     }
 
-    // 스테이지가 넘어간다면 호출할 것
+        // 파괴용
     protected virtual IEnumerator DestroyMess()
     {
         yield return new WaitForSeconds(90f);
         Destroy(this.gameObject);
+    }
+
+    public void Damage(float damage)
+    {
+        currentHealth -= damage;
+
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        if (currentHealth <= maxHealth * 0.5f && !isPhaseTwo)
+        {
+            isPhaseTwo = true;
+            Enter2Phase();
+        }
+        else if (currentHealth <= 0f)
+        {
+            ChangeState(AIState.Dead);
+        }
     }
 }

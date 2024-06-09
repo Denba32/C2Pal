@@ -11,6 +11,7 @@ public class BossShadow : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
 
     public float dashSpeed;
+    public float damage;
     private bool isDamaged;
 
     private IObjectPool<BossShadow> _ManagedPool;
@@ -32,7 +33,7 @@ public class BossShadow : MonoBehaviour
     void RandomSpawn()
     {
         float randomSide = Random.Range(-maxSideDistance, maxSideDistance);
-        if (isTrueXFalseZ) // 참이면 X false면 z입니다.
+        if (isTrueXFalseZ) // 참이면 x side false면 z side입니다.
         {
             transform.position = new Vector3(randomSide, spawnPoint.y, spawnPoint.z);
         }
@@ -53,7 +54,7 @@ public class BossShadow : MonoBehaviour
         if(other.gameObject.CompareTag("Player") && isDamaged == false)
         {
             isDamaged = true;
-            Debug.Log("그림자 습격에 맞았습니다1");
+            CharacterManager.Instance.Player.condition.uiconditions.health.Substract(damage);
         }
     }
 
@@ -66,12 +67,13 @@ public class BossShadow : MonoBehaviour
     }
 
     // 페이즈 2를 위한 것
-    public void InitObject(Vector3 _spawnPosition, float _maxDistance, bool _isTrueXFalseZ, float _dashSpeed)
+    public void InitObject(Vector3 _spawnPosition, float _maxDistance, bool _isTrueXFalseZ, float _dashSpeed, float _damage)
     {
         spawnPoint = _spawnPosition;
         maxSideDistance = _maxDistance;
         isTrueXFalseZ = _isTrueXFalseZ;
         dashSpeed = _dashSpeed;
+        damage = _damage;
     }
 
     public void SetManagedPool(IObjectPool<BossShadow> pool)
