@@ -202,6 +202,10 @@ public class EnemyNPC : MonoBehaviour
         {
             spawnPoint.GetComponent<MonsterSpawnPoint>().MonsterDead(this.gameObject);
         }
+        foreach (GameObject item in dropItems)
+        {
+            Destroy(item);
+        }
         Destroy(this.gameObject);
     }
 }
