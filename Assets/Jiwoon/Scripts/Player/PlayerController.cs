@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Animations;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
-using UnityEngine.InputSystem.XR;
-
+using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public PlayerCondition condition;
