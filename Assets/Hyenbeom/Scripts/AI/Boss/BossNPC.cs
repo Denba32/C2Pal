@@ -349,7 +349,8 @@ public class BossNPC : MonoBehaviour, IDamagable
     private BossShadow CreateShadow()
     {
         BossShadow bossShadow = Instantiate(statSO._ShadowPrefab).GetComponent<BossShadow>();
-        bossShadow.InitObject(spawnShadowPosition, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed, statSO.damage, forwardAngle);
+        NavMesh.SamplePosition(spawnShadowPosition, out NavMeshHit shadowHit, 3f, NavMesh.AllAreas);
+        bossShadow.InitObject(shadowHit.position, maxSideDistance, isTrueXFalseZ, statSO.shadowSpeed, statSO.damage, forwardAngle);
         bossShadow.SetManagedPool(_Pool);
         return bossShadow;
     }
