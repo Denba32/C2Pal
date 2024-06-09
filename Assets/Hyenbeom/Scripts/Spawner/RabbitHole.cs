@@ -11,8 +11,8 @@ public class RabbitHole : MonoBehaviour
     public float spawnDuration;
     public int maxSpawn;
 
-    public float callTest;
-    public float comeOutTest;
+    //public float callTest;
+    //public float comeOutTest;
 
     private List<GameObject> rabbitList = new List<GameObject>();
 
@@ -23,8 +23,8 @@ public class RabbitHole : MonoBehaviour
     {
         // 낮과 밤이 됐을 때 이벤트에다가 넣어서 나오는 것과 Spawn을 조종할 것
         RabbitSpawn();
-        StartCoroutine(RabbitCallTest());
-        StartCoroutine(RabbitComeOutTest());
+        //StartCoroutine(RabbitCallTest());
+        //StartCoroutine(RabbitComeOutTest());
     }
 
     void RabbitSpawn()
@@ -36,16 +36,16 @@ public class RabbitHole : MonoBehaviour
         }
     }
 
-    IEnumerator RabbitCallTest()
-    {
-        yield return new WaitForSeconds(callTest);
-        RabbitCall();
-    }
-    IEnumerator RabbitComeOutTest()
-    {
-        yield return new WaitForSeconds(comeOutTest);
-        RabbitComeOut();
-    }
+    //IEnumerator RabbitCallTest()
+    //{
+    //    yield return new WaitForSeconds(callTest);
+    //    RabbitCall();
+    //}
+    //IEnumerator RabbitComeOutTest()
+    //{
+    //    yield return new WaitForSeconds(comeOutTest);
+    //    RabbitComeOut();
+    //}
 
     // 낮이 되었을 때 발동
     void RabbitComeOut()

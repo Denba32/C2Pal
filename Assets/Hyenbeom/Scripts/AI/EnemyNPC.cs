@@ -136,6 +136,8 @@ public class EnemyNPC : MonoBehaviour
             if (Time.time - lastAttackTime > statSO.attackRate)
             {
                 lastAttackTime = Time.time;
+
+                // TODO 공격 효과음 추가
                 //CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
                 animator.speed = 1;
                 animator.SetTrigger("Attack");
