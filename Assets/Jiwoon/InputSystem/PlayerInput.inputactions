@@ -60,15 +60,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "OpenOptions",
-                    "type": "Button",
-                    "id": "660b8123-56e1-429e-9dff-b0d6b60341ac",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Sprint",
                     "type": "Value",
                     "id": "906d2c39-ea0b-432d-9a11-038044aab28f",
@@ -186,17 +177,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenInventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "55bfe070-b796-4867-b713-f4d7e58f37eb",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenOptions",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
