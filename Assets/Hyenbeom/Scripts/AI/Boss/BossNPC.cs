@@ -133,10 +133,14 @@ public class BossNPC : MonoBehaviour, IDamagable
         switch (aiState)
         {
             case AIState.Idle:
+                SoundManager.Instance.Play("Monster1_Breathing3", Define.SoundType.Effect);
+
                 agent.isStopped = true;
                 agent.speed = statSO.walkSpeed;
                 break;
             case AIState.Attack:
+                
+                SoundManager.Instance.Play("MonsterBite3", Define.SoundType.Effect);
                 agent.isStopped = false;
                 agent.speed = statSO.runSpeed;
                 break;
@@ -162,6 +166,8 @@ public class BossNPC : MonoBehaviour, IDamagable
         switch(pattern)
         {
             case BattlePattern.Rush:
+                SoundManager.Instance.Play("hound_roar", Define.SoundType.Effect);
+
                 animator.SetBool("Run", true);
                 agent.isStopped = false;
                 agent.speed = statSO.runSpeed;

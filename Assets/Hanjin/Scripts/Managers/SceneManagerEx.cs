@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx : Singleton<SceneManagerEx>
 {
+    // 임시 저장용
+    public Dictionary<int, Item> playerInven;
     public Define.SceneType CurrentScene  = Define.SceneType.MainScene;
 
     public Define.SceneType PreviousScene = Define.SceneType.None;
@@ -29,15 +31,26 @@ public class SceneManagerEx : Singleton<SceneManagerEx>
 
     private IEnumerator LoadAsyncScene(Define.SceneType type)
     {
+
         // TODO 로딩화면 키기
         if(Loading == null)
         {
             Loading = UIManager.Instance.ShowPopupUI<LoadingUI>();
         }
+        UIManager.Instance.ShowMainSceneUI(false);
         Loading.gameObject.SetActive(true);
         asyncLoad = SceneManager.LoadSceneAsync(GetSceneName(type));
 
         asyncLoad.allowSceneActivation = false;
+
+        if(CharacterManager.Instance.Player != null)
+        {
+            if (CharacterManager.Instance.Player.inventory.PlayerInven != null)
+            {
+                playerInven = CharacterManager.Instance.Player.inventory.PlayerInven;
+            }
+        }
+
 
         Clear();
 
@@ -46,10 +59,13 @@ public class SceneManagerEx : Singleton<SceneManagerEx>
             Loading.slider_Progress.value = asyncLoad.progress;
             yield return null;
         }
+        yield return CoroutineHelper.WaitForSeconds(1f);
 
+
+        asyncLoad.allowSceneActivation = true;
         // TODO 로딩화면 끄기
         Loading.gameObject.SetActive(false);
-        asyncLoad.allowSceneActivation = true;
+        
     }
 
     private string GetSceneName(Define.SceneType type)

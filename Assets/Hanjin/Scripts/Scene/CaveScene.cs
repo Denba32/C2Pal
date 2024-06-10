@@ -13,7 +13,8 @@ public class CaveScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.SceneType.Castle;
+
+        SceneManagerEx.Instance.CurrentScene = Define.SceneType.CaveScene;
         ResourceManager.Instance.Instantiate("Player/Player").transform.position = respawnPoint.position;
     }
 }

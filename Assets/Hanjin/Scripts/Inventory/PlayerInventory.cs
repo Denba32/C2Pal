@@ -18,9 +18,16 @@ public class PlayerInventory
         {
             if (playerInven == null)
             {
-                // TODO : 데이터 가져오기
+                if(SceneManagerEx.Instance.playerInven != null)
+                {
+                    playerInven = SceneManagerEx.Instance.playerInven;
+                }
+                else
+                {
+                    playerInven = new Dictionary<int, Item>();
 
-                playerInven = new Dictionary<int, Item>();
+                }
+
             }
             return playerInven;
         }
@@ -333,7 +340,8 @@ public class PlayerInventory
     public void CheckItems()
     {
         Debug.Log($"현재 수용중인 아이템 수량{CurrentCapacity}");
-        for(int i = 0; i < playerInven.Count; i++)
+        
+        for(int i = 0; i < PlayerInven.Count; i++)
         {
             Debug.Log($"{i}번째 슬롯의 아이템 : {playerInven[i].itemData.displayName} 남은 개수 : {playerInven[i].quantity}");
         }

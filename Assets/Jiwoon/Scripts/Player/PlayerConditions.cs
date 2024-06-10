@@ -59,7 +59,7 @@ public class PlayerCondition : MonoBehaviour
 
             if(health.curValue <= 0 )
             {
-                // TODO Die
+                Application.Quit();
             }
 
             return true;

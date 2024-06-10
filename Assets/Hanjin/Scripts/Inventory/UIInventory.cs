@@ -50,7 +50,7 @@ public class UIInventory : PopupUI
 
     private void OnEnable()
     {
-        
+        GetPlayerInvenInfo();
     }
 
     private void OnDisable()
@@ -90,7 +90,36 @@ public class UIInventory : PopupUI
 
     private void GetPlayerInvenInfo()
     {
-        // for (int i = 0; i < CharacterManager.Instance.Player.inventory.PlayerInven.Cout)
+        if(slots == null)
+        {
+            if(slots.Length <= 0)
+            {
+                slots = new ItemSlot[inventory.maxCapacity];
+
+                for (int i = 0; i < slots.Length; i++)
+                {
+                    slots[i] = CreateSlot(slotPanel);
+                    slots[i].index = i;
+                    slots[i].inventory = this;
+                    slots[i].description = descriptionPanel;
+                }
+            }
+        }
+        if(CharacterManager.Instance.Player.inventory.PlayerInven != null)
+        {
+            if(CharacterManager.Instance.Player.inventory.PlayerInven.Count > 0)
+            {
+                if(slots != null)
+                {
+                    var data = CharacterManager.Instance.Player.inventory.PlayerInven.ToArray();
+                    for(int i = 0; i < data.Length; i++)
+                    {
+                        UpdateUI(data[i].Value);
+                    }
+                }
+            }
+        }
+            
     }
 
 
@@ -131,13 +160,28 @@ public class UIInventory : PopupUI
 
             return;
         }
-        ItemSlot slot = slots[data.slotId];
-        slot.item = data.itemData;
-        slot.quantity = data.quantity;
+        if(slots.Length <=0)
+        {
+            for (int i = 0; i < slots.Length; i++)
+            {
+                slots[i] = CreateSlot(slotPanel);
+                slots[i].index = i;
+                slots[i].inventory = this;
+                slots[i].description = descriptionPanel;
+            }
 
-        Debug.Log("UI 슬롯에 저장된 Quantity : " + slot.quantity);
+        }
+        if(data.slotId <= slots.Length)
+        {
+            ItemSlot slot = slots[data.slotId];
+            slot.item = data.itemData;
+            slot.quantity = data.quantity;
 
-        UpdateUI();
+            Debug.Log("UI 슬롯에 저장된 Quantity : " + slot.quantity);
+
+            UpdateUI();
+        }
+
     }
 
     #region 정렬 기능

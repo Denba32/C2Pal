@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -174,6 +175,30 @@ public class UIManager : Singleton<UIManager>
             {
                 mainUI.gameObject.SetActive(true);
             }
+        }
+    }
+
+    public void ShowMainSceneUI(bool active)
+    {
+        if (mainUI == null)
+        {
+            mainUI = ShowSceneUI<MainSceneUI>();
+            mainUI.gameObject.SetActive(true);
+            sceneUI = mainUI;
+        }
+        else
+        {
+            if(active)
+            {
+                mainUI.gameObject.SetActive(true);
+
+            }
+            else
+            {
+                mainUI.gameObject.SetActive(false);
+
+            }
+
         }
     }
 

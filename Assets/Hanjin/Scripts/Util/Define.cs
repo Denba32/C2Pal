@@ -11,9 +11,10 @@ public class Define
     {
         None,
         StartScene,
+        StoryScene,
         MainScene,
         CaveScene,
-        Castle
+        BossStage
     }
     public enum EquipmentType
     {
@@ -84,5 +85,12 @@ public class Define
         Stump,
         Mushroom,
         Boss
+    }
+
+    public enum LeverType
+    {
+        Normal,
+        Special
+
     }
 }

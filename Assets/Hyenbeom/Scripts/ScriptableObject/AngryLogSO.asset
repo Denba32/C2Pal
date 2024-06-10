@@ -18,7 +18,7 @@ MonoBehaviour:
   runSpeed: 3
   enemyType: 0
   dropOnDeath:
-  - {fileID: 4722454393968942401, guid: 65b3b3ca01332fb4a9eee3f347f1686a, type: 3}
+  - {fileID: 7586761059240959524, guid: 5ac986060fcc8f448b11fb0cfe242d1a, type: 3}
   detectDistance: 7
   minWanderWaitTime: 3
   maxWanderWaitTime: 5

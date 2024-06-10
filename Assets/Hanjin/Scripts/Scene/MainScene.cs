@@ -17,7 +17,7 @@ public class MainScene : BaseScene
         base.Init();
         SceneManagerEx.Instance.CurrentScene = Define.SceneType.MainScene;
 
-        if (SceneManagerEx.Instance.PreviousScene == Define.SceneType.None || SceneManagerEx.Instance.PreviousScene == Define.SceneType.StartScene)
+        if (SceneManagerEx.Instance.PreviousScene == Define.SceneType.None || SceneManagerEx.Instance.PreviousScene == Define.SceneType.StartScene || SceneManagerEx.Instance.PreviousScene == Define.SceneType.StoryScene)
         {
             ResourceManager.Instance.Instantiate("Player/Player").transform.position = firstRespawn.position;
         }
@@ -25,7 +25,7 @@ public class MainScene : BaseScene
         {
             ResourceManager.Instance.Instantiate("Player/Player").transform.position = cave.position;
         }
-        else if(SceneManagerEx.Instance.PreviousScene == Define.SceneType.Castle)
+        else if(SceneManagerEx.Instance.PreviousScene == Define.SceneType.BossStage)
         {
             ResourceManager.Instance.Instantiate("Player/Player").transform.position = bloodCastle.position;
 
