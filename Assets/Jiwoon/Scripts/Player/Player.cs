@@ -44,4 +44,5 @@ public class Player : MonoBehaviour
             inventory.CheckItems();
         }
     }
+
 }

@@ -9,7 +9,7 @@ public class Equipment : MonoBehaviour
     public Transform equipPos;
 
     private PlayerController controller;
-    // private PlayerCondition condition;
+     private PlayerCondition condition;
 
     private void Start()
     {
@@ -38,4 +38,5 @@ public class Equipment : MonoBehaviour
         }
     }
 
+    public bool IsEquipped => curEquip != null;
 }

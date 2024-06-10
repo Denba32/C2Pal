@@ -31,6 +31,15 @@ public class Interaction : MonoBehaviour
 
     private void OnEnable()
     {
+        if(promptObj == null || promptText == null || pickupIcon == null || useIcon == null || talkIcon == null)
+        {
+            promptObj = UIManager.Instance.MainUI.promptObj;
+            promptText = UIManager.Instance.MainUI.promptText;
+            pickupIcon = UIManager.Instance.MainUI.pickupIcon;
+            useIcon = UIManager.Instance.MainUI.useIcon;
+            talkIcon = UIManager.Instance.MainUI.talkIcon;
+            layerMask = LayerMask.GetMask("Interactable");
+        }
         GameManager.Instance.onGamePause += OnPause;
         GameManager.Instance.onGameStart += OnStart;
     }
@@ -52,8 +61,6 @@ public class Interaction : MonoBehaviour
                 DetectObject();
             }
         }
-
-
     }
 
     private void OnPause()

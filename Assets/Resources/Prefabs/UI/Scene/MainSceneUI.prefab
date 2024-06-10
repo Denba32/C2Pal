@@ -890,7 +890,7 @@ MonoBehaviour:
   curValue: 0
   maxValue: 100
   startValue: 10
-  passiveValue: 0
+  passiveValue: 2
   uiBar: {fileID: 5146802405830825871}
   text: {fileID: 8504036429088900768}
 --- !u!1 &4781725259661939651
@@ -1384,7 +1384,7 @@ MonoBehaviour:
   curValue: 0
   maxValue: 100
   startValue: 50
-  passiveValue: 0
+  passiveValue: 1
   uiBar: {fileID: 2378279367531319952}
   text: {fileID: 930617277405532317}
 --- !u!1 &5926501081000096614
@@ -1544,7 +1544,7 @@ MonoBehaviour:
   curValue: 0
   maxValue: 100
   startValue: 10
-  passiveValue: 0
+  passiveValue: 1
   uiBar: {fileID: 6323254351186192556}
   text: {fileID: 5976373707584200866}
 --- !u!1 &7208455804021321916
@@ -1702,6 +1702,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiConditions: {fileID: 5950929903426632106}
+  promptObj: {fileID: 5926501081000096614}
+  promptText: {fileID: 2223034219980169692}
+  pickupIcon: {fileID: 891244311932357149}
+  useIcon: {fileID: 3684700607352997993}
+  talkIcon: {fileID: 5396847791268971211}
   alertText: {fileID: 3452168564633740947}
 --- !u!1 &8099519520697836206
 GameObject:

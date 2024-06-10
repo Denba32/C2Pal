@@ -56,6 +56,7 @@ public class PlayerInventory
 
     public GameObject uiPrefab;
 
+    // 아이템 단일 추가
     public void AddItem(ItemData itemData)
     {
         if(itemData != null)
@@ -105,15 +106,13 @@ public class PlayerInventory
         // TODO UIInventory에게 알리기
     }
 
+    // 아이템 복수 추가
     public void AddItem(ItemData itemData, int quantity)
     {
         if (itemData != null)
         {
             Item item = null;
-            // Stacking 가능한 아이템일 경우
-            // TODO : 이미 존재하는 아이템인지 확인
 
-            // 소비템이거나 자원템일 경우
             if (itemData.itemType == Define.ItemType.Consumable || itemData.itemType == Define.ItemType.Resource)
             {
                 item = GetStackItem(itemData);
@@ -128,11 +127,13 @@ public class PlayerInventory
                 }
 
             }
-            // 새로운 아이템을 추가하려고 할 시 Full인지 확인
+
+            // 아이템이 복수일 경우 떨굼
             if (maxCapacity <= CurrentCapacity)
             {
                 CharacterManager.Instance.Player.ITData = null;
                 ResourceManager.Instance.Instantiate(itemData.dropPrefab, CharacterManager.Instance.Player.dropPosition.position, Quaternion.Euler(Vector3.one * UnityEngine.Random.value * 360));
+                // 경고 알림이 떠야함
                 return;
             }
             item = new Item();

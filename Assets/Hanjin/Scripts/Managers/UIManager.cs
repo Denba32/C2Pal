@@ -40,6 +40,23 @@ public class UIManager : Singleton<UIManager>
             return craft;
         }
     }
+
+    private MainSceneUI mainUI;
+
+    public MainSceneUI MainUI
+    {
+        get
+        {
+            if (mainUI == null)
+            {
+                mainUI = ShowSceneUI<MainSceneUI>();
+                mainUI.gameObject.SetActive(true);
+                Util.ActiveCursor(false);
+            }
+            return mainUI;
+        }
+    }
+
     public GameObject Root
     {
         get
@@ -139,7 +156,28 @@ public class UIManager : Singleton<UIManager>
 
     }
 
-    // T는 스크립트, name은 prefab의 이름, 팝업을 여는 기능
+    public void ShowMainSceneUI()
+    {
+        if(mainUI == null)
+        {
+            mainUI = ShowSceneUI<MainSceneUI>();
+            mainUI.gameObject.SetActive(true);
+            sceneUI = mainUI;
+        }
+        else
+        {
+            if (mainUI.gameObject.activeInHierarchy)
+            {
+                mainUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                mainUI.gameObject.SetActive(true);
+            }
+        }
+    }
+
+
     public T ShowPopupUI<T>(string name = null) where T : PopupUI
     {
         if (string.IsNullOrEmpty(name))
@@ -185,7 +223,6 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    // T는 스크립트, name은 prefab의 이름, 팝업을 여는 기능
     public T ShowSceneUI<T>(string name = null) where T : SceneUI
     {
         if (string.IsNullOrEmpty(name))

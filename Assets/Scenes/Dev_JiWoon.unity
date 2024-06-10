@@ -1665,7 +1665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3007184053879788125, guid: 9ea3af330b8f01249bf920284a981052, type: 3}
       propertyPath: jumpPower
-      value: 50
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6882928274676400293, guid: 9ea3af330b8f01249bf920284a981052, type: 3}
       propertyPath: m_LocalPosition.y

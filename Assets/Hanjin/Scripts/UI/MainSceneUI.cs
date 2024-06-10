@@ -7,6 +7,14 @@ public class MainSceneUI : SceneUI
 {
     public UIConditions uiConditions;
 
+    public GameObject promptObj;
+    public TMP_Text promptText;
+
+    public GameObject pickupIcon;
+    public GameObject useIcon;
+    public GameObject talkIcon;
+    
+
     public TMP_Text alertText;
 
     private Coroutine coAlert;
@@ -17,6 +25,10 @@ public class MainSceneUI : SceneUI
         alertText.gameObject.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        alertText.gameObject.SetActive(false);
+    }
 
     public void SetAlert(string message)
     {

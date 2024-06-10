@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Roll")]
     [SerializeField] private BoxCollider playerBody;
+    private bool _isRolling = false;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -92,7 +93,6 @@ public class PlayerController : MonoBehaviour
                 {
                     StopCoroutine(ZeroStaminaSlower());
                     StartCoroutine(ZeroStaminaSlower());
-                    
                 }
             }
             else
@@ -107,17 +107,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-   
-
     private void LateUpdate()
     {
         if (!isPause)
         {
             CameraLook();
         }
-
     }
-  
+
+    #region 움직임
     private void Move()
     {
         Vector3 moveDirection = transform.forward * _movementInput.y + transform.right * _movementInput.x;
@@ -153,6 +151,11 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsWalking", false);
         }
     }
+
+    #endregion
+
+    #region 달리기
+
     public void OnSprint(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -171,6 +174,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region 카메라
+
     void CameraLook()
     {
         if (Time.timeScale > 0f)
@@ -187,6 +194,10 @@ public class PlayerController : MonoBehaviour
         mouseDelta = context.ReadValue<Vector2>();
     }
 
+    #endregion
+
+    #region 점프
+
     public void OnJump(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started && _isGrounded)
@@ -196,6 +207,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region 인벤토리
+
     public void OnInventory(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)
@@ -203,6 +218,9 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.ShowInventory();
         }
     }
+
+    #endregion
+
 
     bool IsGrounded()
     {
@@ -224,66 +242,107 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    #region 구르기
+
+    public void OnRoll(InputAction.CallbackContext context)
     {
-        if (!_isAttacking && context.phase == InputActionPhase.Performed)
+        if (!_isRolling && context.phase == InputActionPhase.Performed)
         {
-            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+            if (condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
             {
-                StopCoroutine(SpecialAttackCoroutine());
-                StartCoroutine(SpecialAttackCoroutine());
+                StartCoroutine(Rolling());
                 condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
-                
             }
             else
             {
-                StartCoroutine(AttackCoroutine());
+                Debug.Log("스테미나가 부족합니다.");
             }
-        }
-    }
-    public void OnRoll(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
-        {
-            StartCoroutine(Rolling());
-            condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
         }
     }
     IEnumerator Rolling()
     {
-        float originalMoveSpeed = moveSpeed;
+        _isRolling = true; // 구르는 동작 시작
 
+        float originalMoveSpeed = moveSpeed;
         Vector3 originalPosition = transform.position;
         Vector3 targetPosition = originalPosition + transform.forward * 3f; // 이동 거리 조절 가능
-
         float duration = 0.3f;
         float elapsedTime = 0f;
-
         Vector3 startPosition = originalPosition;
 
         anim.SetBool("IsRoll", true);
 
         while (elapsedTime < duration)
         {
-
             float distanceCovered = (elapsedTime / duration) * Vector3.Distance(startPosition, targetPosition);
             transform.position = startPosition + transform.forward * distanceCovered;
-
-
             playerBody.transform.position = transform.position;
-
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        // 구르는 동작이 끝나면
         anim.SetBool("IsRoll", false);
-
         transform.position = targetPosition;
-
         playerBody.transform.position = transform.position;
+        moveSpeed = moveSpeedRestorer;
+
+        _isRolling = false; // 구르는 동작 종료
+    }
+
+    #endregion
+
+    #region 공격
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (!_isAttacking && context.phase == InputActionPhase.Performed)
+        {
+            // 더블 스윙
+            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+            {
+                if (CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
+                {
+                    StopCoroutine(SpecialAttackCoroutine());
+                    StartCoroutine(SpecialAttackCoroutine());
+                    condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
+                }
+            }
+
+            // 일반 스윙
+            else
+            {
+                if(CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
+                    StartCoroutine(AttackCoroutine());
+            }
+        }
+    }
+
+    IEnumerator Punch()
+    {
+        moveSpeed = 0f;
+        yield return new WaitForSeconds(0.1f);
+
+        Vector3 originalPosition = transform.position;
+        Vector3 targetPosition = originalPosition + transform.forward * 0.5f;
+        float elapsedTime = 0f;
+        float duration = 0.3f;
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        _isAttacking = false;
+
+        yield return new WaitForSeconds(0.3f);
 
         moveSpeed = moveSpeedRestorer;
     }
+
+
     IEnumerator Swing()
     {
         moveSpeed = 0f;
@@ -363,11 +422,7 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("IsSpecialAttack", false);
     }
 
-    public void OnPickUp(InputAction.CallbackContext context)
-    {
-
-    }
-
+    #endregion
 
     public void OnOpenOptions(InputAction.CallbackContext context)
     {
