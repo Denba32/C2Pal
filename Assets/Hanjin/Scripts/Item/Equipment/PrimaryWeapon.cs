@@ -11,6 +11,8 @@ public class PrimaryWeapon : EquipItem
 
     private bool attacking;
 
+    public Collider meleeArea;
+    public TrailRenderer trailEffect;
     public override void OnInteract()
     {
         base.OnInteract();

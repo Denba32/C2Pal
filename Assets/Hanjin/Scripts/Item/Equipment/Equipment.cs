@@ -1,4 +1,5 @@
 
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -8,13 +9,12 @@ public class Equipment : MonoBehaviour
 
     public Transform equipPos;
 
+
     private PlayerController controller;
-     private PlayerCondition condition;
 
     private void Start()
     {
         controller = GetComponent<PlayerController>();
-        // condition = GetComponent<PlayerCondition>();
 
         GameManager.Instance.Data.Init();
     }
@@ -26,13 +26,24 @@ public class Equipment : MonoBehaviour
 
         curEquip.name = data.equipPrefab.name;
         curEquip.Equip(equipPos);
+
+        PrimaryWeapon primaryWeapon = curEquip as PrimaryWeapon;
+
+        if(primaryWeapon != null )
+        {
+            CharacterManager.Instance.Player.controller.meleeArea = primaryWeapon.meleeArea;
+            CharacterManager.Instance.Player.controller.trailEffect = primaryWeapon.trailEffect;
+        }
     }
 
     public void UnEquip()
     {
         if(curEquip != null)
         {
+            CharacterManager.Instance.Player.controller.meleeArea = null;
+            CharacterManager.Instance.Player.controller.trailEffect = null;
             curEquip.UnEquip();
+
             Destroy(curEquip.gameObject);
             curEquip = null;
         }

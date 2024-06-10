@@ -102,6 +102,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 17c9501de16f12141a2409aa0203d203, type: 2}
   aSource: {fileID: 0}
   constraint: {fileID: 7150020834094976289}
+  meleeArea: {fileID: 3232404340702344429}
+  trailEffect: {fileID: 3103237609668834579}
 --- !u!65 &3232404340702344429
 BoxCollider:
   m_ObjectHideFlags: 0

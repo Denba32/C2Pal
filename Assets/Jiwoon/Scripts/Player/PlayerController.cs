@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Attack")]
     [SerializeField] private float damage;
-    [SerializeField] private BoxCollider meleeArea;
-    [SerializeField] private TrailRenderer trailEffect;
+    public Collider meleeArea;
+    public TrailRenderer trailEffect;
     [SerializeField] private float force;
     [SerializeField] private float UseSpecialAttackStamina;
 
@@ -298,22 +298,21 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isAttacking && context.phase == InputActionPhase.Performed)
         {
-            // ¥ı∫Ì Ω∫¿Æ
-            if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+            if (CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
             {
-                if (CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
+                // ¥ı∫Ì Ω∫¿Æ
+                if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
                 {
                     StopCoroutine(SpecialAttackCoroutine());
                     StartCoroutine(SpecialAttackCoroutine());
                     condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
                 }
-            }
 
-            // ¿œπ› Ω∫¿Æ
-            else
-            {
-                if(CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
+                // ¿œπ› Ω∫¿Æ
+                else
+                {
                     StartCoroutine(AttackCoroutine());
+                }
             }
         }
     }

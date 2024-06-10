@@ -18,7 +18,6 @@ public class Player : MonoBehaviour
 
     public ItemData ITData;
 
-
     private void Awake()
     {
         CharacterManager.Instance.Player = this;
@@ -34,7 +33,6 @@ public class Player : MonoBehaviour
     private void OnDisable()
     {
         onAddItem -= inventory.AddItem;
-
     }
 
     private void Update()
