@@ -4,6 +4,8 @@ using System.Collections;
 using Unity.VisualScripting;
 using System.Net;
 using System;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 public class PlayerController : MonoBehaviour
 {
     public PlayerCondition condition;
@@ -45,6 +47,7 @@ public class PlayerController : MonoBehaviour
     public bool _isSprinting = false;
     public bool _isGrounded = true;
     private bool _isAttacking = false;
+    private bool _isRolling = false;
 
     private bool isPause = false;
     private bool staminaRecover = false;
@@ -243,46 +246,48 @@ public class PlayerController : MonoBehaviour
     }
     public void OnRoll(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+        if (!_isRolling && context.phase == InputActionPhase.Performed)
         {
-            StartCoroutine(Rolling());
-            condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
+            if (condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+            {
+                StartCoroutine(Rolling());
+                condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
+            }
+            else
+            {
+                Debug.Log("스테미나가 부족합니다.");
+            }
         }
     }
     IEnumerator Rolling()
     {
-        float originalMoveSpeed = moveSpeed;
+        _isRolling = true; // 구르는 동작 시작
 
+        float originalMoveSpeed = moveSpeed;
         Vector3 originalPosition = transform.position;
         Vector3 targetPosition = originalPosition + transform.forward * 3f; // 이동 거리 조절 가능
-
         float duration = 0.3f;
         float elapsedTime = 0f;
-
         Vector3 startPosition = originalPosition;
 
         anim.SetBool("IsRoll", true);
 
         while (elapsedTime < duration)
         {
-
             float distanceCovered = (elapsedTime / duration) * Vector3.Distance(startPosition, targetPosition);
             transform.position = startPosition + transform.forward * distanceCovered;
-
-
             playerBody.transform.position = transform.position;
-
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        // 구르는 동작이 끝나면
         anim.SetBool("IsRoll", false);
-
         transform.position = targetPosition;
-
         playerBody.transform.position = transform.position;
-
         moveSpeed = moveSpeedRestorer;
+
+        _isRolling = false; // 구르는 동작 종료
     }
     IEnumerator Swing()
     {
