@@ -18,15 +18,8 @@ public class PlayerInventory
         {
             if (playerInven == null)
             {
-                if(SceneManagerEx.Instance.playerInven != null)
-                {
-                    playerInven = SceneManagerEx.Instance.playerInven;
-                }
-                else
-                {
-                    playerInven = new Dictionary<int, Item>();
+                playerInven = new Dictionary<int, Item>();
 
-                }
 
             }
             return playerInven;
@@ -123,52 +116,24 @@ public class PlayerInventory
         {
             Item item = null;
             int otherQuantity = 0;
+            // 소비템이거나 자원템일 경우
             if (itemData.itemType == Define.ItemType.Consumable || itemData.itemType == Define.ItemType.Resource)
             {
                 item = GetStackItem(itemData);
                 if (item != null)
                 {
-                    // 스택 가능 수를 넘을 경우
-                    if(item.itemData.maxAmount < (item.quantity + quantity))
-                    {
-                        // 넣을 수 있는 만큼을 넣은 후
-                        int lastQuantity = item.itemData.maxAmount - item.quantity;
-                        item.quantity += lastQuantity;
+                    item.quantity += quantity;
+                    Debug.Log(item.itemData.displayName + " 개수 : " + item.quantity);
+                    PlayerInven.TryAdd(item.slotId, item);
+                    UIInven.UpdateUI(item);
+                    SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
 
-                        int opticalQuantity = quantity - lastQuantity;
-                        PlayerInven.TryAdd(item.slotId, item);
-                        SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
+                    return;
 
-                        UIInven.UpdateUI(item);
-
-                        // 다시 새로운 누적 공간을 찾음
-                        item = GetStackItem(itemData);
-
-                        // 만약 누적 공간이 있다면 추가로 누적
-                        if (item != null)
-                        {
-                            item.quantity += opticalQuantity;
-                            PlayerInven.TryAdd(item.slotId, item);
-                            UIInven.UpdateUI(item);
-                            return;
-                        }
-                        otherQuantity = opticalQuantity;
-
-                    }
-                    else
-                    {
-                        item.quantity += quantity;
-                        Debug.Log(item.itemData.displayName + " 개수 : " + item.quantity);
-                        PlayerInven.TryAdd(item.slotId, item);
-                        SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
-
-                        UIInven.UpdateUI(item);
-
-                        return;
-                    }
                 }
 
             }
+
             if (maxCapacity <= CurrentCapacity)
             {
                 UIManager.Instance.MainUI.SetAlert("가방 공간이 부족합니다.");
@@ -184,12 +149,6 @@ public class PlayerInventory
 
             item.hashId = item.GetHashCode();
             item.slotId = id;
-            if (otherQuantity > 0)
-            {
-                item.quantity += otherQuantity;
-            }
-            else
-                item.quantity = quantity;
             item.quantity += quantity;
             item.itemData = itemData;
 
@@ -199,7 +158,6 @@ public class PlayerInventory
 
             UIInven.UpdateUI(item);
             CharacterManager.Instance.Player.ITData = null;
-
         }
         // TODO UIInventory에게 알리기
     }
@@ -281,6 +239,7 @@ public class PlayerInventory
             if(filter.quantity == quantity)
             {
                 filter.quantity -= quantity;
+
                 // UpdateItem(filter);
                 return true;
             }

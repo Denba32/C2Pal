@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEx : Singleton<SceneManagerEx>
 {
-    // 임시 저장용
-    public Dictionary<int, Item> playerInven;
     public Define.SceneType CurrentScene  = Define.SceneType.MainScene;
 
     public Define.SceneType PreviousScene = Define.SceneType.None;
@@ -43,14 +41,6 @@ public class SceneManagerEx : Singleton<SceneManagerEx>
 
         asyncLoad.allowSceneActivation = false;
 
-        if(CharacterManager.Instance.Player != null)
-        {
-            if (CharacterManager.Instance.Player.inventory.PlayerInven != null)
-            {
-                playerInven = CharacterManager.Instance.Player.inventory.PlayerInven;
-            }
-        }
-
 
         Clear();
 
@@ -77,5 +67,6 @@ public class SceneManagerEx : Singleton<SceneManagerEx>
     {
         GameManager.Instance.Data.Clear();
         UIManager.Instance.Clear();
+        CharacterManager.Instance.Player.inventory.PlayerInven.Clear();
     }
 }

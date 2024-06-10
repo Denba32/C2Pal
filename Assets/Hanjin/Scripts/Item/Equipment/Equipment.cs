@@ -29,7 +29,7 @@ public class Equipment : MonoBehaviour
 
         PrimaryWeapon primaryWeapon = curEquip as PrimaryWeapon;
 
-        if(primaryWeapon != null )
+            if(primaryWeapon != null )
         {
             primaryWeapon.meleeArea.enabled = false;
             primaryWeapon.trailEffect.enabled = false;

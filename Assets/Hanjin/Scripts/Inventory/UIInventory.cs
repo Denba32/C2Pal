@@ -48,10 +48,7 @@ public class UIInventory : PopupUI
     int curSecondaryWeaponIndex;
     int curArmorIndex;
 
-    private void OnEnable()
-    {
-        GetPlayerInvenInfo();
-    }
+
 
     private void OnDisable()
     {
@@ -81,46 +78,27 @@ public class UIInventory : PopupUI
 
         UpdateUI();
 
+        //if (CharacterManager.Instance.Player.inventory.PlayerInven != null)
+        //{
+        //    if (CharacterManager.Instance.Player.inventory.PlayerInven.Count > 0)
+        //    {
+        //        if (slots != null)
+        //        {
+        //            var data = CharacterManager.Instance.Player.inventory.PlayerInven.ToArray();
+        //            for (int i = 0; i < data.Length; i++)
+        //            {
+        //                UpdateUI(data[i].Value);
+        //            }
+        //        }
+        //    }
+        //}
+
         descriptionPanel.gameObject.SetActive(false);
         selectedBlocker.SetActive(false);
         selectedPanel.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
 
-
-    private void GetPlayerInvenInfo()
-    {
-        if(slots == null)
-        {
-            if(slots.Length <= 0)
-            {
-                slots = new ItemSlot[inventory.maxCapacity];
-
-                for (int i = 0; i < slots.Length; i++)
-                {
-                    slots[i] = CreateSlot(slotPanel);
-                    slots[i].index = i;
-                    slots[i].inventory = this;
-                    slots[i].description = descriptionPanel;
-                }
-            }
-        }
-        if(CharacterManager.Instance.Player.inventory.PlayerInven != null)
-        {
-            if(CharacterManager.Instance.Player.inventory.PlayerInven.Count > 0)
-            {
-                if(slots != null)
-                {
-                    var data = CharacterManager.Instance.Player.inventory.PlayerInven.ToArray();
-                    for(int i = 0; i < data.Length; i++)
-                    {
-                        UpdateUI(data[i].Value);
-                    }
-                }
-            }
-        }
-            
-    }
 
 
     private ItemSlot CreateSlot(Transform parent)
@@ -160,27 +138,13 @@ public class UIInventory : PopupUI
 
             return;
         }
-        if(slots.Length <=0)
-        {
-            for (int i = 0; i < slots.Length; i++)
-            {
-                slots[i] = CreateSlot(slotPanel);
-                slots[i].index = i;
-                slots[i].inventory = this;
-                slots[i].description = descriptionPanel;
-            }
+        ItemSlot slot = slots[data.slotId];
+        slot.item = data.itemData;
+        slot.quantity = data.quantity;
 
-        }
-        if(data.slotId <= slots.Length)
-        {
-            ItemSlot slot = slots[data.slotId];
-            slot.item = data.itemData;
-            slot.quantity = data.quantity;
+        Debug.Log("UI 슬롯에 저장된 Quantity : " + slot.quantity);
 
-            Debug.Log("UI 슬롯에 저장된 Quantity : " + slot.quantity);
-
-            UpdateUI();
-        }
+        UpdateUI();
 
     }
 
@@ -402,85 +366,4 @@ public class UIInventory : PopupUI
     {
         UnEquip(selectedItemIndex);
     }
-
-    /*
-    public void Toggle()
-    {
-        if (inventoryWindow.activeInHierarchy)
-        {
-            GameManager.Instance.GameStart();
-
-            inventoryWindow.SetActive(false);
-        }
-        else
-        {
-            GameManager.Instance.GamePause();
-
-            inventoryWindow.SetActive(true);
-        }
-
-    }
-
-    // 인벤토리 창이 열려있는지 여부 판단
-    public bool IsOpen()
-    {
-        return inventoryWindow.activeInHierarchy;
-    }
-
-
-    ItemSlot GetItemStack(ConsumableItemData data)
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item == data && slots[i].quantity < data.maxAmount)
-            {
-                return slots[i];
-            }
-        }
-        return null;
-    }
-
-    ItemSlot GetItemStack(ResourceItemData data)
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item == data && slots[i].quantity < data.maxAmount)
-            {
-                return slots[i];
-            }
-        }
-        return null;
-    }
-
-    ItemSlot GetEmptySlot()
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item == null)
-            {
-                return slots[i];
-            }
-        }
-        return null;
-    }
-
-
-
-    #region 아이템 사용 함수
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-    #endregion
-    */
 }
