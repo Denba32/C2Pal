@@ -141,7 +141,9 @@ public class EnemyNPC : MonoBehaviour, IDamagable
             if (Time.time - lastAttackTime > statSO.attackRate)
             {
                 lastAttackTime = Time.time;
-                CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
+
+                if(!CharacterManager.Instance.Player.controller.isInvincible)
+                    CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
 
                 animator.speed = 1;
                 animator.SetTrigger("Attack");

@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerCondition : MonoBehaviour
 {
     public UIConditions uiconditions;
-    
 
     Condition health { get { return uiconditions.health; } }
     Condition hunger { get { return uiconditions.hunger; } }

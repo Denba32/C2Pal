@@ -43,7 +43,7 @@ public class PrimaryWeapon : EquipItem
             }
             return;
         }
-        if(target.TryGetComponent(out IDamagable damagable))
+        else if(target.TryGetComponent(out IDamagable damagable))
         {
             damagable.Damage(data.value);
             damagable.Damage(data.value * 0.5f);

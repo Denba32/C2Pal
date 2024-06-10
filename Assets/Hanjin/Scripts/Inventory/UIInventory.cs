@@ -48,6 +48,10 @@ public class UIInventory : PopupUI
     int curSecondaryWeaponIndex;
     int curArmorIndex;
 
+    private void OnEnable()
+    {
+        
+    }
 
     private void OnDisable()
     {
@@ -82,6 +86,13 @@ public class UIInventory : PopupUI
         selectedPanel.gameObject.SetActive(false);
         gameObject.SetActive(false);
     }
+
+
+    private void GetPlayerInvenInfo()
+    {
+        // for (int i = 0; i < CharacterManager.Instance.Player.inventory.PlayerInven.Cout)
+    }
+
 
     private ItemSlot CreateSlot(Transform parent)
     {

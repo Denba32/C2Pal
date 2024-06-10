@@ -29,7 +29,7 @@ public class ResourceObject : MonoBehaviour
         {
             for(int i = 0; i < dropCount; i++)
             {
-                GameObject go = Instantiate(itemToGive.dropPrefab, hitPoint + Vector3.up, Quaternion.identity);
+                GameObject go = Instantiate(itemToGive.dropPrefab, hitPoint - Vector3.back + Vector3.up, Quaternion.identity);
                 go.name = itemToGive.dropPrefab.name;
             }
 

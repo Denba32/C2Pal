@@ -62,8 +62,7 @@ public class PlayerInventory
         if(itemData != null)
         {
             Item item = null;
-            // Stacking 가능한 아이템일 경우
-            // TODO : 이미 존재하는 아이템인지 확인
+
 
             // 소비템이거나 자원템일 경우
             if (itemData.itemType == Define.ItemType.Consumable || itemData.itemType == Define.ItemType.Resource)
@@ -83,6 +82,7 @@ public class PlayerInventory
             // 새로운 아이템을 추가하려고 할 시 Full인지 확인
             if (maxCapacity <= CurrentCapacity)
             {
+                UIManager.Instance.MainUI.SetAlert("가방 공간이 부족합니다.");
                 CharacterManager.Instance.Player.ITData = null;
                 ResourceManager.Instance.Instantiate(itemData.dropPrefab, CharacterManager.Instance.Player.dropPosition.position, Quaternion.Euler(Vector3.one * UnityEngine.Random.value * 360));
                 return;
@@ -112,26 +112,53 @@ public class PlayerInventory
         if (itemData != null)
         {
             Item item = null;
-
+            int otherQuantity = 0;
             if (itemData.itemType == Define.ItemType.Consumable || itemData.itemType == Define.ItemType.Resource)
             {
                 item = GetStackItem(itemData);
                 if (item != null)
                 {
-                    item.quantity += quantity;
-                    Debug.Log(item.itemData.displayName + " 개수 : " + item.quantity);
-                    PlayerInven.TryAdd(item.slotId, item);
-                    UIInven.UpdateUI(item);
-                    return;
+                    // 스택 가능 수를 넘을 경우
+                    if(item.itemData.maxAmount < (item.quantity + quantity))
+                    {
+                        // 넣을 수 있는 만큼을 넣은 후
+                        int lastQuantity = item.itemData.maxAmount - item.quantity;
+                        item.quantity += lastQuantity;
 
+                        int opticalQuantity = quantity - lastQuantity;
+                        PlayerInven.TryAdd(item.slotId, item);
+                        UIInven.UpdateUI(item);
+
+                        // 다시 새로운 누적 공간을 찾음
+                        item = GetStackItem(itemData);
+
+                        // 만약 누적 공간이 있다면 추가로 누적
+                        if (item != null)
+                        {
+                            item.quantity += opticalQuantity;
+                            PlayerInven.TryAdd(item.slotId, item);
+                            UIInven.UpdateUI(item);
+                            return;
+                        }
+                        otherQuantity = opticalQuantity;
+
+                    }
+                    else
+                    {
+                        item.quantity += quantity;
+                        Debug.Log(item.itemData.displayName + " 개수 : " + item.quantity);
+                        PlayerInven.TryAdd(item.slotId, item);
+                        UIInven.UpdateUI(item);
+                        return;
+                    }
                 }
 
             }
-
-            // 아이템이 복수일 경우 떨굼
             if (maxCapacity <= CurrentCapacity)
             {
+                UIManager.Instance.MainUI.SetAlert("가방 공간이 부족합니다.");
                 CharacterManager.Instance.Player.ITData = null;
+
                 ResourceManager.Instance.Instantiate(itemData.dropPrefab, CharacterManager.Instance.Player.dropPosition.position, Quaternion.Euler(Vector3.one * UnityEngine.Random.value * 360));
                 // 경고 알림이 떠야함
                 return;
@@ -142,6 +169,12 @@ public class PlayerInventory
 
             item.hashId = item.GetHashCode();
             item.slotId = id;
+            if (otherQuantity > 0)
+            {
+                item.quantity += otherQuantity;
+            }
+            else
+                item.quantity = quantity;
             item.quantity += quantity;
             item.itemData = itemData;
 
@@ -260,6 +293,10 @@ public class PlayerInventory
                     if (PlayerInven[index].quantity <= 0)
                     {
                         PlayerInven.Remove(index);
+                        if(CurrentCapacity > 0)
+                        {
+                            CurrentCapacity--;
+                        }
                     }
                 }
 
@@ -286,6 +323,7 @@ public class PlayerInventory
     }
     public void CheckItems()
     {
+        Debug.Log($"현재 수용중인 아이템 수량{CurrentCapacity}");
         for(int i = 0; i < playerInven.Count; i++)
         {
             Debug.Log($"{i}번째 슬롯의 아이템 : {playerInven[i].itemData.displayName} 남은 개수 : {playerInven[i].quantity}");

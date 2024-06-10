@@ -23,11 +23,12 @@ public class PlayerController : MonoBehaviour
     [Header("Roll")]
     [SerializeField] private BoxCollider playerBody;
     private bool _isRolling = false;
+    public bool isInvincible = false;
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpPower;
-    [SerializeField] private float sprintMultiplier = 2f;
+    [SerializeField] private float sprintMultiplier = 1.5f;
     [SerializeField] private float groundCheckDistance = 0.1f;
     private float moveSpeedRestorer;
     private Vector2 curMovementInput;
@@ -64,6 +65,18 @@ public class PlayerController : MonoBehaviour
 
         GameManager.Instance.onGamePause += PausePlayer;
         GameManager.Instance.onGameStart += PlayPlayer;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.onGamePause += PausePlayer;
+        GameManager.Instance.onGameStart += PlayPlayer;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.onGamePause -= PausePlayer;
+        GameManager.Instance.onGameStart -= PlayPlayer;
     }
 
     private void OnDestroy()
@@ -262,7 +275,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator Rolling()
     {
         _isRolling = true; // 구르는 동작 시작
-
+        isInvincible = true;
         float originalMoveSpeed = moveSpeed;
         Vector3 originalPosition = transform.position;
         Vector3 targetPosition = originalPosition + transform.forward * 3f; // 이동 거리 조절 가능
@@ -296,51 +309,30 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (!_isAttacking && context.phase == InputActionPhase.Performed)
+        if(!isPause)
         {
-            if (CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
+            if (!_isAttacking && context.phase == InputActionPhase.Performed)
             {
-                // 더블 스윙
-                if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+                if (CharacterManager.Instance.Player.primaryWeapon.IsEquipped)
                 {
-                    StopCoroutine(SpecialAttackCoroutine());
-                    StartCoroutine(SpecialAttackCoroutine());
-                    condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
-                }
+                    // 더블 스윙
+                    if (Keyboard.current.leftShiftKey.isPressed && condition.uiconditions.stamina.curValue >= UseSpecialAttackStamina)
+                    {
+                        StopCoroutine(SpecialAttackCoroutine());
+                        StartCoroutine(SpecialAttackCoroutine());
+                        condition.uiconditions.stamina.Substract(UseSpecialAttackStamina);
+                    }
 
-                // 일반 스윙
-                else
-                {
-                    StartCoroutine(AttackCoroutine());
+                    // 일반 스윙
+                    else
+                    {
+                        StartCoroutine(AttackCoroutine());
+                    }
                 }
             }
         }
+
     }
-
-    IEnumerator Punch()
-    {
-        moveSpeed = 0f;
-        yield return new WaitForSeconds(0.1f);
-
-        Vector3 originalPosition = transform.position;
-        Vector3 targetPosition = originalPosition + transform.forward * 0.5f;
-        float elapsedTime = 0f;
-        float duration = 0.3f;
-
-        while (elapsedTime < duration)
-        {
-            transform.position = Vector3.Lerp(originalPosition, targetPosition, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        _isAttacking = false;
-
-        yield return new WaitForSeconds(0.3f);
-
-        moveSpeed = moveSpeedRestorer;
-    }
-
 
     IEnumerator Swing()
     {

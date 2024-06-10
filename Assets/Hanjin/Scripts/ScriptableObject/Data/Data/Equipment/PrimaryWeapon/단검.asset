@@ -26,7 +26,7 @@ MonoBehaviour:
   equipmentType: 0
   requireLevel: 1
   equipPrefab: {fileID: 639033738074413731, guid: efbd483d3afb5804eab993f3314287f3, type: 3}
-  posOffset: {x: 0, y: 0, z: 0}
+  posOffset: {x: 0.1, y: -0.05, z: 0}
   rotOffset: {x: 0, y: 0, z: 0}
   attackRate: 1.5
   attackDistance: 2

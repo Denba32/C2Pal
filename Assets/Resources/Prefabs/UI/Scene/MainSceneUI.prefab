@@ -889,8 +889,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curValue: 0
   maxValue: 100
-  startValue: 10
-  passiveValue: 2
+  startValue: 100
+  passiveValue: 5
   uiBar: {fileID: 5146802405830825871}
   text: {fileID: 8504036429088900768}
 --- !u!1 &4781725259661939651
@@ -1383,8 +1383,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curValue: 0
   maxValue: 100
-  startValue: 50
-  passiveValue: 1
+  startValue: 60
+  passiveValue: 0.5
   uiBar: {fileID: 2378279367531319952}
   text: {fileID: 930617277405532317}
 --- !u!1 &5926501081000096614
@@ -1543,7 +1543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curValue: 0
   maxValue: 100
-  startValue: 10
+  startValue: 100
   passiveValue: 1
   uiBar: {fileID: 6323254351186192556}
   text: {fileID: 5976373707584200866}

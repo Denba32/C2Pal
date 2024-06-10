@@ -12,7 +12,8 @@ public class Define
         None,
         Start,
         Main,
-
+        Cave,
+        Castle
     }
     public enum EquipmentType
     {
