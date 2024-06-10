@@ -14,6 +14,7 @@ public class EnemySO : ScriptableObject
     public float walkSpeed;
     public float runSpeed;
 
+    public Define.EnemyType enemyType;
     // º¸»ó
     [Header("Loot")]
     public GameObject[] dropOnDeath;

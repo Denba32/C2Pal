@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: MushroomSO
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  health: 10
+  health: 20
   walkSpeed: 1
   runSpeed: 4
+  enemyType: 1
   dropOnDeath:
   - {fileID: 4722454393968942401, guid: 65b3b3ca01332fb4a9eee3f347f1686a, type: 3}
   detectDistance: 5

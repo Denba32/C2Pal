@@ -10,9 +10,9 @@ public class Define
     public enum SceneType
     {
         None,
-        Start,
-        Main,
-        Cave,
+        StartScene,
+        MainScene,
+        CaveScene,
         Castle
     }
     public enum EquipmentType
@@ -66,6 +66,23 @@ public class Define
         Gold,
         Weapon,
         Armor,
+        Consumable,
         Resource
+    }
+
+    public enum SoundType
+    {
+        Bgm,
+        Effect,
+        Voice,
+        Hit,
+        Max
+    }
+
+    public enum EnemyType
+    {
+        Stump,
+        Mushroom,
+        Boss
     }
 }

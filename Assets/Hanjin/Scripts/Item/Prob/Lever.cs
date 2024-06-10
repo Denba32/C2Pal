@@ -53,7 +53,7 @@ public class Lever : GimmickObject
         animator.SetBool(hashActive, isActive);
         if (aSource.isPlaying)
             aSource.Stop();
-        aSource.PlayOneShot(leverSound, 0.5f);
+        aSource.PlayOneShot(leverSound, SoundManager.Instance.effectVolume);
 
         targetAnimator.SetBool("isActive", isActive);
 

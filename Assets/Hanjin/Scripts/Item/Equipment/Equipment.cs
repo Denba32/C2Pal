@@ -31,8 +31,11 @@ public class Equipment : MonoBehaviour
 
         if(primaryWeapon != null )
         {
+            primaryWeapon.meleeArea.enabled = false;
+            primaryWeapon.trailEffect.enabled = false;
             CharacterManager.Instance.Player.controller.meleeArea = primaryWeapon.meleeArea;
             CharacterManager.Instance.Player.controller.trailEffect = primaryWeapon.trailEffect;
+
         }
     }
 

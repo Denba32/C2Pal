@@ -57,9 +57,9 @@ public class DoorObject : GimmickObject
                 aSource.Stop();
 
             if (isActive)
-                aSource.PlayOneShot(doorOpen, 1f);
+                aSource.PlayOneShot(doorOpen, SoundManager.Instance.effectVolume);
             else
-                aSource.PlayOneShot(doorClose, 1f);
+                aSource.PlayOneShot(doorClose, SoundManager.Instance.effectVolume);
 
 
             while ((animator.GetCurrentAnimatorStateInfo(0).IsName("Open") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.75f)

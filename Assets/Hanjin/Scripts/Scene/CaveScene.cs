@@ -4,21 +4,7 @@ using UnityEngine;
 
 public class CaveScene : BaseScene
 {
-    public override void Enter()
-    {
-        base.Enter();
-        SceneType = Define.SceneType.Castle;
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    public Transform respawnPoint;
 
     protected override void Clear()
     {
@@ -27,5 +13,7 @@ public class CaveScene : BaseScene
     protected override void Init()
     {
         base.Init();
+        SceneType = Define.SceneType.Castle;
+        ResourceManager.Instance.Instantiate("Player/Player").transform.position = respawnPoint.position;
     }
 }

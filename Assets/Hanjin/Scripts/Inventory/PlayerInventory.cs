@@ -73,6 +73,8 @@ public class PlayerInventory
                     item.quantity++;
                     Debug.Log(item.itemData.displayName + " 개수 : " +  item.quantity);
                     PlayerInven.TryAdd(item.slotId, item);
+                    SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
+
                     UIInven.UpdateUI(item);
                     return;
 
@@ -99,6 +101,7 @@ public class PlayerInventory
             PlayerInven.TryAdd(item.slotId , item);
             CurrentCapacity++;
 
+            SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
             UIInven.UpdateUI(item);
             CharacterManager.Instance.Player.ITData = null;
             
@@ -127,6 +130,8 @@ public class PlayerInventory
 
                         int opticalQuantity = quantity - lastQuantity;
                         PlayerInven.TryAdd(item.slotId, item);
+                        SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
+
                         UIInven.UpdateUI(item);
 
                         // 다시 새로운 누적 공간을 찾음
@@ -148,7 +153,10 @@ public class PlayerInventory
                         item.quantity += quantity;
                         Debug.Log(item.itemData.displayName + " 개수 : " + item.quantity);
                         PlayerInven.TryAdd(item.slotId, item);
+                        SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
+
                         UIInven.UpdateUI(item);
+
                         return;
                     }
                 }
@@ -180,6 +188,7 @@ public class PlayerInventory
 
             PlayerInven.TryAdd(item.slotId, item);
             CurrentCapacity++;
+            SoundManager.Instance.Play("PickupSound", Define.SoundType.Effect);
 
             UIInven.UpdateUI(item);
             CharacterManager.Instance.Player.ITData = null;

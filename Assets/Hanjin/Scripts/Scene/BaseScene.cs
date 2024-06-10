@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class BaseScene : MonoBehaviour
 {
-    public Define.SceneType SceneType { get; protected set; } = Define.SceneType.Main;
+    public Define.SceneType SceneType { get; protected set; } = Define.SceneType.MainScene;
 
     protected virtual void Awake()
     {

@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
     private bool isPause = false;
     private bool staminaRecover = false;
 
+    private float gravityPower = 2.0f;
+    private float yVelocity; 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -90,6 +92,9 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
+
+        if (!_isGrounded)
+            AddGravity();
     }
 
     private void Update()
@@ -217,6 +222,7 @@ public class PlayerController : MonoBehaviour
         {
             _rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
             _isGrounded = false;
+            yVelocity = 0;
         }
     }
 
@@ -269,6 +275,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Debug.Log("스테미나가 부족합니다.");
+
             }
         }
     }
@@ -289,10 +296,11 @@ public class PlayerController : MonoBehaviour
         {
             float distanceCovered = (elapsedTime / duration) * Vector3.Distance(startPosition, targetPosition);
             transform.position = startPosition + transform.forward * distanceCovered;
-            playerBody.transform.position = transform.position;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        isInvincible = false;
 
         // 구르는 동작이 끝나면
         anim.SetBool("IsRoll", false);
@@ -417,15 +425,10 @@ public class PlayerController : MonoBehaviour
 
     public void OnOpenOptions(InputAction.CallbackContext context)
     {
-        if (Time.timeScale == 0f)
+        if(Time.timeScale == 1f)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1f;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Confined;
-            Time.timeScale = 0f;
+            Time.timeScale = 0;
+            UIManager.Instance.ShowPopupUI<OptionUI>();
         }
     }
     public void GamePause()
@@ -453,6 +456,13 @@ public class PlayerController : MonoBehaviour
         Debug.Log("당신은 속도를 회복했습니다.");
         sprintMultiplier = 2f;
         moveSpeed = moveSpeedRestorer;
+    }
+
+    private void AddGravity()
+    {
+        yVelocity -= gravityPower * Time.fixedDeltaTime;
+        yVelocity = Mathf.Clamp(yVelocity, -5f, 0);
+        _rb.velocity = new Vector3(_rb.velocity.x, yVelocity + _rb.velocity.y, _rb.velocity.z);
     }
 
     private void PlayPlayer() => isPause = false;

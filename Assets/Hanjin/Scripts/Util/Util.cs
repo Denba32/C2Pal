@@ -14,9 +14,25 @@ public class Util
         return component;
     }
 
-    public static void ActiveCursor(bool active)
+    public static void ActiveCursor(bool active, float time)
     {
         if(active)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Time.timeScale = time;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Time.timeScale = time;
+
+        }
+    }
+    public static void ActiveCursor(bool active)
+    {
+        if (active)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -25,6 +41,7 @@ public class Util
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
         }
     }
 }

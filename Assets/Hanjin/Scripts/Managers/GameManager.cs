@@ -27,6 +27,7 @@ public class GameManager : Singleton<GameManager>
     {
         Data.Init();
     }
+
     public void GameStart()
     {
         onGameStart?.Invoke();

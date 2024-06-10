@@ -199,6 +199,7 @@ public class UIManager : Singleton<UIManager>
         return popup;
     }
 
+    
     public void ClosePopupUI(PopupUI popup)
     {
         if (popupUI.Count <= 0)
@@ -221,6 +222,7 @@ public class UIManager : Singleton<UIManager>
             Util.ActiveCursor(false);
         }
     }
+
 
 
     public T ShowSceneUI<T>(string name = null) where T : SceneUI

@@ -93,16 +93,26 @@ public class EnemyNPC : MonoBehaviour, IDamagable
                 agent.speed = statSO.walkSpeed;
                 break;
             case AIState.Attack:
+                if (statSO.enemyType == Define.EnemyType.Mushroom)
+                {
+                    SoundManager.Instance.Play("mushroom_roar", Define.SoundType.Effect);
+                }
+                else if(statSO.enemyType == Define.EnemyType.Stump)
+                {
+                    SoundManager.Instance.Play("woodmonster_roar", Define.SoundType.Effect);
+                }
                 agent.isStopped = false;
                 agent.speed = statSO.runSpeed;
                 break;
             case AIState.Dead: // 초기화 작업
+                SoundManager.Instance.Play("rabbit_squeck", Define.SoundType.Effect);
+
                 agent.isStopped = true;
                 agent.speed = 0f;
                 animator.speed = 1f;
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
-                _collider.isTrigger = true; // 통과 시키게 하기 위해서
+                _collider.enabled = false; // 통과 시키게 하기 위해서
                 StartCoroutine(DestroyMess());
                 DropItem();
                 break;
@@ -140,10 +150,15 @@ public class EnemyNPC : MonoBehaviour, IDamagable
             animator.SetBool("Moving", false); // 공격거리에 있을 때는 통통튈 필요 없다.
             if (Time.time - lastAttackTime > statSO.attackRate)
             {
+                if (statSO.enemyType == Define.EnemyType.Stump)
+                    SoundManager.Instance.Play("WoodDeathRollingTornado", Define.SoundType.Effect);
+
                 lastAttackTime = Time.time;
 
-                if(!CharacterManager.Instance.Player.controller.isInvincible)
-                    CharacterManager.Instance.Player.condition.uiconditions.health.Substract(statSO.damage);
+                if (!CharacterManager.Instance.Player.controller.isInvincible)
+                {
+                    CharacterManager.Instance.Player.condition.Damage(statSO.damage);
+                }
 
                 animator.speed = 1;
                 animator.SetTrigger("Attack");
@@ -220,6 +235,14 @@ public class EnemyNPC : MonoBehaviour, IDamagable
 
     public void Damage(float damage)
     {
+        if (statSO.enemyType == Define.EnemyType.Stump)
+        {
+            SoundManager.Instance.Play("woodmonster_hit", Define.SoundType.Hit);
+        }
+        else if(statSO.enemyType == Define.EnemyType.Mushroom)
+        {
+            SoundManager.Instance.Play("mushroom_hit", Define.SoundType.Hit);
+        }
         currentHealth -= damage;
 
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);

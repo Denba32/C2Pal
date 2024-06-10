@@ -18,6 +18,7 @@ public class MainSceneUI : SceneUI
     public TMP_Text alertText;
 
     private Coroutine coAlert;
+
     public override void Init()
     {
         base.Init();

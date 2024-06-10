@@ -49,6 +49,26 @@ public class PlayerCondition : MonoBehaviour
         hunger.Add(amount);
     }
 
+    public bool Damage(float amount)
+    {
+        if(amount > 0)
+        {
+            health.Substract(amount);
+
+            SoundManager.Instance.Play("PlayerHit", Define.SoundType.Hit);
+
+            if(health.curValue <= 0 )
+            {
+                // TODO Die
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     private void Die()
     {
         Debug.Log("당신은 죽었습니다!");

@@ -18,18 +18,7 @@ public class AnimationEvents : MonoBehaviour
             if (audioSource.isPlaying)
                 audioSource.Stop();
 
-            audioSource.PlayOneShot(clip, 0.4f);
-        }
-    }
-
-    public void PlayOnePlay(AudioClip clip, float volume)
-    {
-        if (audioSource != null)
-        {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
-
-            audioSource.PlayOneShot(clip, volume);
+            audioSource.PlayOneShot(clip, SoundManager.Instance.effectVolume);
         }
     }
 }

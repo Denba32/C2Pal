@@ -7,7 +7,10 @@ public class ChestObject : GimmickObject
     [Header("Reward")]
     public ItemData reward;
     public int gold;
+    
     public GameObject goldPrefab;
+
+    public Transform dropPosition;
     
     public AudioClip openChest;
     public Define.RewardType rewardType;
@@ -32,37 +35,24 @@ public class ChestObject : GimmickObject
             {
                 goldPrefab.SetActive(true);
             }
-            else if(rewardType == Define.RewardType.Resource)
+            else
             {
                 goldPrefab.SetActive(false);
+                GameObject go = Instantiate(reward.dropPrefab);
+                if(go.TryGetComponent(out Rigidbody rb))
+                {
+                    rb.isKinematic = true;
+                }
+                go.transform.position = dropPosition.position;
             }
-            else if(rewardType == Define.RewardType.Armor)
-            {
 
-            }
-            else if(rewardType == Define.RewardType.Weapon)
-            {
-
-            }
             isActive = true;
             animator.SetBool(hashActive, true);
             if (aSource.isPlaying)
                 aSource.Stop();
-            aSource.PlayOneShot(openChest, 1f);
+            aSource.PlayOneShot(openChest, SoundManager.Instance.effectVolume);
             GetComponent<Collider>().enabled = false;
         }
-    }
-
-    public ItemData Reward()
-    {
-        if(rewardType != Define.RewardType.Gold)
-        {
-            if (reward == null)
-                return null;
-            return reward;
-        }
-        return null;
-
     }
 
 }

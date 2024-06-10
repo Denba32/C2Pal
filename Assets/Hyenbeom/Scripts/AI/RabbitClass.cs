@@ -57,6 +57,7 @@ public class RabbitClass : NPC
                 break;
             case AIState.Flee:
                 agent.isStopped = false;
+                SoundManager.Instance.Play("RabbitScream", Define.SoundType.Effect);
                 agent.speed = statSO.runSpeed;
                 break;
             case AIState.GoingHome:
@@ -64,12 +65,13 @@ public class RabbitClass : NPC
                 agent.speed = statSO.walkSpeed;
                 break;
             case AIState.Dead: // 초기화 작업
+                SoundManager.Instance.Play("rabbit_squeck", Define.SoundType.Effect);
                 agent.isStopped = true;
                 agent.speed = 0f;
                 animator.speed = 1f;
                 agent.ResetPath();
                 animator.SetBool("Dead", true);
-                _collider.isTrigger = true; // 통과 시키게 하기 위해서
+                _collider.enabled = false; // 통과 시키게 하기 위해서
                 StartCoroutine(DestroyMess());
                 DropItem(); // 드랍 아이템
                 break;

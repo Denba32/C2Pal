@@ -12,7 +12,7 @@ public class StartScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.SceneType.Start;
+        SceneType = Define.SceneType.StartScene;
     }
 
     protected override void Clear()
