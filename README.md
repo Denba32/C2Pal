@@ -46,10 +46,7 @@
 <div markdown="1">
  
  ![Honeycam 2024-06-11 11-48-54](https://github.com/Denba32/C2Pal/assets/167148091/717af97c-b274-4a34-8365-0a665a856ae2)
-![Honeycam 2024-06-11 11-50-45](https://github.com/Denba32/C2Pal/assets/167148091/15e47226-34a9-4d34-ba59-6a9c986824cc)
-
- 
-- 왼쪽 클릭 공격과 오른쪽 클릭 구르기
+![Honeycam 2024-06-11 11-55-17](https://github.com/Denba32/C2Pal/assets/167148091/6fc0af91-9e44-4771-b9ab-7f7376681bc8)
 
   </div>
 </details>
@@ -57,10 +54,19 @@
 <details>
 <summary>재료 채집</summary>
 <div markdown="1">
+
+![Honeycam 2024-06-11 11-50-45](https://github.com/Denba32/C2Pal/assets/167148091/15e47226-34a9-4d34-ba59-6a9c986824cc)
+![Honeycam 2024-06-11 12-01-32](https://github.com/Denba32/C2Pal/assets/167148091/081bc89c-88dd-479e-85e8-8853de7c0b37)
+
 </div>
 </details>
 
 <details>
 <summary>장비 밎 도구 제작</summary>
 <div markdown="1">
+
+![2(c) Pal(친구)조 (1)](https://github.com/Denba32/C2Pal/assets/167148091/926e954d-0bdd-46eb-9df4-78ffc82ebf8c)
+ 
+</div>
+</details>
 
