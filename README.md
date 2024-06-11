@@ -40,7 +40,7 @@
 </div>
 </details>
 
-# 🔧 기능 소개
+# 🔧 주요 기능 소개
 <details>
 <summary>캐릭터 조작</summary>
 <div markdown="1">
