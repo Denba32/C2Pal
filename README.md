@@ -30,7 +30,10 @@
 🔧 기능 소개
 캐릭터
 - 이동과 구르기
-- 
+![Honeycam 2024-06-10 16-41-01](https://github.com/Denba32/C2Pal/assets/167148091/0e9eab06-01a5-4ce0-bfce-c21fe8354b4c)
+![Honeycam 2024-06-10 16-54-27](https://github.com/Denba32/C2Pal/assets/167148091/cd508bc7-6d1a-433f-a4e1-f433fa55d09c)
 
 
 ♻️ 화면 구성
+MainScene
+![화면 캡처 2024-06-11 105937](https://github.com/Denba32/C2Pal/assets/167148091/0d269118-eeef-4819-8c5b-d5e785709da3)
