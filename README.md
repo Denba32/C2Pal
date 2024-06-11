@@ -73,4 +73,5 @@
 # 💻 관련 링크
 
 팀 노션 페이지 : https://www.notion.so/teamsparta/Team-2-904f8c8b572c4a98b066e3c3f41e2dd3
+
 팀 피그마 : https://www.figma.com/design/FH9dRXRzqFqy1jX0aPv0Sd/Untitled?node-id=0-1&t=78Y4fzEuhE5a8TnZ-0
