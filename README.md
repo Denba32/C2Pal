@@ -1,5 +1,6 @@
 # C2Pal
- 
+ ![unnamed](https://github.com/Denba32/C2Pal/assets/167148091/02d6c2fc-f679-463f-8999-019920b98fc1)
+
 3D 서바이벌 프로젝트
 
 # 💻 프로젝트 소개
@@ -28,12 +29,14 @@
 레퍼런스 게임 : 캐슬바니아, 젤다의 전설 야생의 숨결 게임
 
 # 🔧 기능 소개
-캐릭터
-
-![Honeycam 2024-06-10 16-41-01](https://github.com/Denba32/C2Pal/assets/167148091/0e9eab06-01a5-4ce0-bfce-c21fe8354b4c)
+<details>
+<summary>캐릭터</summary>
+<div markdown="1">
 ![Honeycam 2024-06-10 16-54-27](https://github.com/Denba32/C2Pal/assets/167148091/cd508bc7-6d1a-433f-a4e1-f433fa55d09c)
-
-- 이동과 구르기
+![Honeycam 2024-06-10 16-41-01](https://github.com/Denba32/C2Pal/assets/167148091/0e9eab06-01a5-4ce0-bfce-c21fe8354b4c)
+- 공격과 구르기
+</div>
+</details>
 
 # ♻️ 화면 구성
 MainScene
